@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-g+w)gf-n+1$ycng2)fvgx7h4nm+%x3wg%yw@35blz-nl@iy02n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['pare.pythonanywhere.com']
 
@@ -119,10 +119,11 @@ STATIC_URL = '/static/'
 # Serve existing 'stactic' folder (renamed upstream) during development
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    BASE_DIR / "stactic",
+   
 ]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media' 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
   
