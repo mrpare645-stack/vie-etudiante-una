@@ -1,0 +1,278 @@
+{% load static %}
+
+<!-- Modern Navbar -->
+<header class="navbar-header">
+  <div class="container-fluid container-xl">
+    <div class="navbar-content">
+      
+      <!-- Logo -->
+      <a href="{% url 'vie_estudiantine_una:accueil' %}" class="logo-section">
+        <img src="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}" alt="Université Nangui Abrogoua — Abidjan (CIV)" class="univ-logo">
+        <div class="logo-text" aria-hidden="true" style="display:none;">
+          <h1>UNA</h1>
+          <p>Vie Estudiantine</p>
+        </div>
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav class="nav-menu">
+        <ul class="nav-links">
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- CTA Button -->
+      <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta">UNA+</a>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-toggle" id="mobile-toggle">
+        <i class="bi bi-list"></i>
+      </button>
+
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobile-nav">
+      <ul>
+        <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+        <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+        <li style="border: none; padding: 15px 0;"><a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta" style="display: inline-block;">UNA+</a></li>
+      </ul>
+    </nav>
+
+  </div>
+</header>
+
+<style>
+  /* Navbar Styles */
+  .navbar-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 70px;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-section {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 15px;
+  }
+
+  .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-section img {
+    height: 50px;
+    width: auto;
+    display: block;
+  }
+
+  /* University logo styling */
+  .univ-logo {
+    height: 48px;
+    width: auto;
+    max-height: 56px;
+    padding: 4px 8px;
+    display: inline-block;
+    vertical-align: middle;
+    transition: transform 0.15s ease;
+  }
+
+  .univ-logo:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 991px) {
+    .univ-logo {
+      height: 40px;
+      padding: 2px 6px;
+    }
+  }
+
+  /* Hide original text visually (kept for screen readers) */
+  .logo-text {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .logo-text h1 {
+    font-size: 18px;
+    color: #004687;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .logo-text p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+  }
+
+  .nav-links {
+    display: none;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    margin-right: 30px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  @media (min-width: 992px) {
+    .nav-links {
+      display: flex !important;
+    }
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .nav-links a:hover {
+    color: #004687;
+  }
+
+  .nav-links a:hover::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #004687;
+    border-radius: 2px;
+  }
+
+  .btn-cta {
+    background: linear-gradient(135deg, #004687 0%, #0066cc 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    display: none;
+  }
+
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 70, 135, 0.3);
+    color: white;
+  }
+
+  @media (min-width: 992px) {
+    .btn-cta {
+      display: inline-block;
+    }
+  }
+
+  .mobile-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  @media (max-width: 991px) {
+    .mobile-toggle {
+      display: block;
+    }
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 70px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: white;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 99;
+  }
+
+  .mobile-nav.active {
+    left: 0;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .mobile-nav li {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+  }
+
+  .mobile-nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // Mobile Menu Toggle
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  if (mobileToggle && mobileNav) {
+    mobileToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('active');
+    });
+
+    // Close mobile menu when a link is clicked
+    const mobileNavLinks = mobileNav.querySelectorAll('a');
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+      });
+    });
+  }
+</script>

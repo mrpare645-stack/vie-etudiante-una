@@ -1,0 +1,1114 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>UNA - Vie Estudiantine</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+    <link rel="icon" sizes="32x32" href="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}">
+      <link rel="shortcut icon" href="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}">
+      <link href="{% static 'mentor/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <link href="{% static 'mentor/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link href="{% static 'mentor/assets/css/main.css' %}" rel="stylesheet">
+    
+    <!-- Custom Navbar and Slider CSS -->
+    <link href="{% static 'mentor/assets/css/navbar-slider-custom.css' %}" rel="stylesheet">
+
+  <!-- Custom CSS for Navbar and Slider (Inline) -->
+  <style>
+    /* Navbar Styles */
+    .navbar-header {
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      gap: 15px;
+    }
+
+    .logo-section img {
+      height: 50px;
+      width: auto;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      color: #004687;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .logo-text p {
+      font-size: 12px;
+      color: #666;
+      margin: 0;
+    }
+
+    .nav-links {
+      display: none;
+      list-style: none;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+      margin-left: auto;
+      margin-right: 30px;
+    }
+
+    .nav-links.show {
+      display: flex;
+    }
+
+    @media (min-width: 992px) {
+      .nav-links {
+        display: flex !important;
+      }
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #004687;
+    }
+
+    .nav-links a:hover::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #004687;
+      border-radius: 2px;
+    }
+
+    .btn-cta {
+      background: linear-gradient(135deg, #004687 0%, #0066cc 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      display: none;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 70, 135, 0.3);
+    }
+
+    @media (min-width: 992px) {
+      .btn-cta {
+        display: inline-block;
+      }
+    }
+
+    .mobile-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    @media (max-width: 991px) {
+      .mobile-toggle {
+        display: block;
+      }
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 70px;
+      left: -100%;
+      width: 100%;
+      height: calc(100vh - 70px);
+      background: white;
+      overflow-y: auto;
+      transition: left 0.3s ease;
+      z-index: 99;
+    }
+
+    .mobile-nav.active {
+      left: 0;
+    }
+
+    .mobile-nav ul {
+      list-style: none;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .mobile-nav li {
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+    }
+
+    .mobile-nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* Slider Styles */
+    .hero-slider {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+      background: #f5f5f5;
+    }
+
+    @media (max-width: 768px) {
+      .hero-slider {
+        height: 300px;
+      }
+    }
+
+    .slides-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 70, 135, 0.4);
+      z-index: 1;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .slide-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      animation: slideInDown 0.6s ease;
+    }
+
+    @media (max-width: 768px) {
+      .slide-title {
+        font-size: 28px;
+      }
+    }
+
+    .slide-subtitle {
+      font-size: 20px;
+      margin-bottom: 25px;
+      animation: slideInUp 0.6s ease;
+      opacity: 0.95;
+    }
+
+    @media (max-width: 768px) {
+      .slide-subtitle {
+        font-size: 16px;
+      }
+    }
+
+    .slide-btn {
+      background: #ff6b35;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      animation: slideInUp 0.8s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .slide-btn:hover {
+      background: #e55a24;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Slider Navigation */
+    .slider-nav {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .slider-arrow {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      font-size: 20px;
+    }
+
+    .slider-arrow:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(1.1);
+    }
+
+    .slider-dots {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .dot.active {
+      background: white;
+      width: 30px;
+      border-radius: 6px;
+    }
+
+    .dot:hover {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    @media (max-width: 768px) {
+      .slider-nav {
+        bottom: 15px;
+      }
+
+      .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+      }
+
+      .dot.active {
+        width: 25px;
+      }
+    }
+
+    /* Quick services tiles styling */
+    .quick-services .card {
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+      transition: transform 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+      padding: 1.25rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .quick-services .card h4 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #07213a;
+    }
+
+    .quick-services .card .ms-3 i {
+      color: #0b5ed7;
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    .quick-services .card:hover {
+      transform: translateY(-8px);
+      background-color: #eef6ff;
+      box-shadow: 0 18px 40px rgba(16,24,40,0.12);
+    }
+
+    @media (min-width: 768px) {
+      .quick-services .row.g-3 > .col-md-12 { margin-bottom: 1.25rem; }
+    }
+  </style>
+
+  <!-- =======================================================
+  * Template Name: Mentor
+  * Template URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
+  * Updated: Jul 07 2025 with Bootstrap v5.3.7
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <!-- Modern Navbar -->
+  <header class="navbar-header">
+    <div class="container-fluid container-xl">
+      <div class="navbar-content">
+        
+        <!-- Logo -->
+        <a href="{% url 'vie_estudiantine_una:accueil' %}" class="logo-section">
+          <img src="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}" alt="Université Nangui Abrogoua — Abidjan" class="univ-logo">
+          <div class="logo-text">
+            <h1>UNA</h1>
+            <p>Vie Estudiantine</p>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- CTA Button -->
+        <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta">UNA+</a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-toggle" id="mobile-toggle">
+          <i class="bi bi-list"></i>
+        </button>
+
+      </div>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          <li style="border: none; padding: 15px 0;"><a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta" style="display: inline-block;">UNA+</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Slider Section -->
+    <section class="hero-slider" id="hero-slider">
+      <div class="slides-container" id="slides-container">
+        {% for slide in slides %}
+          <div class="slide {% if forloop.first %}active{% endif %}" style="background-image: url('{{ slide.image.url }}');">
+            <div class="slide-content">
+              {% if slide.titre %}<h2 class="slide-title">{{ slide.titre }}</h2>{% endif %}
+              {% if slide.sous_titre %}<p class="slide-subtitle">{{ slide.sous_titre }}</p>{% endif %}
+              {% if slide.bouton_lien and slide.bouton_texte %}<a href="{{ slide.bouton_lien }}" class="slide-btn">{{ slide.bouton_texte }}</a>{% endif %}
+            </div>
+          </div>
+        {% empty %}
+        {% endfor %}
+      </div>
+
+      <!-- Slider Navigation -->
+      <div class="slider-nav">
+        <button class="slider-arrow" id="prev-slide" title="Précédent">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="slider-dots" id="slider-dots">
+          {% for slide in slides %}
+            <div class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></div>
+          {% empty %}
+            <div class="dot active" data-slide="0"></div>
+          {% endfor %}
+        </div>
+        <button class="slider-arrow" id="next-slide" title="Suivant">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </section><!-- /Hero Slider Section -->
+
+    <!-- Quick Services Tiles Section (moved here) -->
+    <section id="quick-services" class="section quick-services">
+      <div class="container">
+        <div class="row align-items-center gy-4">
+            
+          <div class="col-lg-6">
+            <div class="row g-3">
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Soutien aux personnes étudiantes en situation de handicap</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Mesures d'accommodement</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Trouver une bourse d'études</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="row g-3">
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Reconnaissance de l'engagement étudiant</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Rechercher un emploi</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-12">
+                <a href="https://www.univ-na.ci/" target="_blank" rel="noopener" class="card p-4 d-flex align-items-center text-decoration-none text-dark shadow-sm">
+                  <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="mb-0">Vos services</h4>
+                    </div>
+                    <div class="ms-3 text-primary"><i class="bi bi-arrow-right-circle"></i></div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+            <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+            <img src="{{ about.image.url }}" class="img-fluid" alt="">
+          </div>
+
+          <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+            <h3>{{ about.titre }}</h3>
+            <p class="fst-italic">
+              {{ about.description }}
+            </p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i> <span>{{ about.point_1 }}</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>{{ about.point_2 }}</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>{{ about.point_3 }}</span></li>
+            </ul>
+            <a href="{{ about.bouton_lien }}" class="read-more"><span>{{ about.bouton_texte }}</span><i class="bi bi-arrow-right"></i></a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Counts Section -->
+    <section id="counts" class="section counts light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="+8000" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Etudiants</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="64" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Actualités</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="100" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Evenements</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Clubs</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Counts Section -->
+
+    <!-- Why Us Section -->
+    <section id="why-us" class="section why-us">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="why-box">
+              <h3>Pourquoi la Vie Estudiantine à l'UNA ?</h3>
+              <p>
+                 La vie estudiantine à l'Université Nangui Abrogoua ne se limite pas aux cours.
+            Elle englobe l'accompagnement social, la restauration universitaire, le logement,
+            la santé, les activités culturelles et l'insertion professionnelle des étudiants.
+              </p>
+              <div class="text-center">
+                <a href="#" class="more-btn"><span>Découvrir les services</span> <i class="bi bi-chevron-right"></i></a>
+              </div>
+            </div>
+          </div><!-- End Why Box -->
+
+          <div class="col-lg-8 d-flex align-items-stretch">
+            <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+
+              <div class="col-xl-4">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-mortarboard"></i>
+                  <h4>Encadrement académique</h4>
+                  <p>Un accompagnement pédagogique pour favoriser la réussite universitaire.</p>
+                </div>
+              </div><!-- End Icon Box -->
+
+              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-cup-hot"></i>
+                  <h4>Restauration universitaire</h4>
+                  <p>Des restaurants universitaires gérés par le CROUA2 pour le bien-être étudiant.</p>
+                </div>
+              </div><!-- End Icon Box -->
+
+              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-heart-pulse"></i>
+                  <h4>Santé & assistance sociale</h4>
+                  <p>Accès aux soins et à un accompagnement social adapté aux étudiants.</p>
+                </div>
+              </div><!-- End Icon Box -->
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Why Us Section -->
+
+    <!-- Features Section -->
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Formation</h2>
+        <p> Parcours de formation de l'UNA</p>
+      </div><!-- End Section Title -->
+    <section id="features" class="features section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+          {% for filiere in filieres %}
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="features-item">
+              <i class="bi {{ filiere.icon }}" style="color: #ffbb2c;"></i>
+              <h3><a href="https://www.univ-na.ci/formations.html" class="stretched-link"> {{ filiere.nom }} </a></h3>
+            </div>
+          </div><!-- End Feature Item -->
+          {% endfor %}
+        </div>
+
+      </div>
+
+      </div>
+
+      </div>
+
+    </section><!-- /Features Section -->
+
+    <!-- Courses Section -->
+    <section id="courses" class="courses section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Actualités</h2>
+        <p>Actualités récentes</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row">
+          {% for actualite in actualites %}
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="course-item">
+              <img src="{{ actualite.image.url }}" class="img-fluid" alt="...">
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <p class="category"> {{ actualite.categorie }}</p>
+                  <p class="price"> {{actualite.date_pub}} </p>
+                </div>
+
+                <h3><a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}">{{ actualite.titre }}</a></h3>
+                <p class="description">{{ actualite.resume|truncatechars:150 }}</p>
+                <p><a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}" class="more-btn">Lire la suite</a></p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    <img src="{{ actualite.image_auteur.url }}" class="img-fluid" alt="">
+                    <a href="" class="trainer-link"> {{actualite.nom_auteur}} </a>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bi bi-person user-icon"></i>&nbsp;{{ actualite.vues }}
+                    &nbsp;&nbsp;
+                    <i class="bi bi-heart heart-icon"></i>&nbsp;{{ actualite.likes }}
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div> <!-- End Course Item-->
+          {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn btn-primary">Voir plus d'actualités</a>
+        </div>
+
+        
+
+    </section><!-- /Courses Section -->
+
+    <!-- Clubs & Events Highlights -->
+    <section id="highlights" class="section highlights">
+      <div class="container">
+        <div class="row gy-4">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="container section-title">
+              <h3>Clubs en tendance</h3>
+              <p>Les deux clubs les plus actifs</p>
+            </div>
+            <div class="row">
+              {% for club in top_clubs %}
+              <div class="col-12 d-flex mb-3">
+                <img src="{{ club.logo.url }}" alt="{{ club.nom_club }}" style="width:100px; height:70px; object-fit:cover; margin-right:15px;" />
+                <div>
+                  <h4 class="mb-1">{{ club.nom_club }}</h4>
+                  <p class="mb-1">{{ club.description|truncatechars:120 }}</p>
+                  <a href="{% url 'vie_estudiantine_una:trainers' %}" class="more-btn">Voir le club</a>
+                </div>
+              </div>
+              {% empty %}
+              <p>Aucun club pour le moment.</p>
+              {% endfor %}
+
+              <div class="mt-3">
+                <a href="{% url 'vie_estudiantine_una:trainers' %}" class="btn btn-outline-primary">Voir tous les clubs</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="container section-title">
+              <h3>Événements récents</h3>
+              <p>Prochains rendez-vous et activités</p>
+            </div>
+            <div class="list-group">
+              {% for event in recent_events %}
+              <div class="list-group-item d-flex align-items-start">
+                {% if event.photo %}
+                  <img src="{{ event.photo.url }}" alt="{{ event.titre }}" style="width:100px; height:70px; object-fit:cover; margin-right:15px;" />
+                {% endif %}
+                <div>
+                  <h5 class="mb-1">{{ event.titre }}</h5>
+                  <small class="text-muted">{{ event.date_pub|default:"" }}</small>
+                  <p class="mb-1">{{ event.description|truncatechars:140 }}</p>
+                </div>
+              </div>
+              {% empty %}
+              <p>Aucun événement pour le moment.</p>
+              {% endfor %}
+            </div>
+            <div class="mt-3">
+              <a href="{% url 'vie_estudiantine_una:events' %}" class="btn btn-outline-primary">Voir tous les événements</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- /Highlights -->
+
+    
+
+    <!-- Trainers Index Section -->
+    <section id="trainers-index" class="section trainers-index">
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Acteurs</h2>
+        <p>Les acteurs de la vie estudiantine de l'UNA</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row">
+          {% for acteur in acteurs %}
+          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="member">
+              <img src="{{acteur.photo.url}}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>{{acteur.nom}}</h4>
+                <span>{{acteur.role}}</span>
+                <p>
+                  {{acteur.description}}
+                </p>
+                <div class="social">
+                  <a href="{{acteur.twitter}}"><i class="bi bi-twitter-x"></i></a>
+                  <a href="{{acteur.facebook}}"><i class="bi bi-facebook"></i></a>
+                  <a href="{{acteur.instagram}}"><i class="bi bi-instagram"></i></a>
+                  <a href="{{acteur.linkedin}}"><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+          {% endfor %}
+        </div>
+
+      </div>
+
+    </section><!-- /Trainers Index Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Vie Estudiantine UNA</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Université Nangui Abrogoua</p>
+            <p>Abidjan – Côte d'Ivoire</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+225 0501257670</span></p>
+            <p><strong>Email:</strong> <span>vieestudiantine@una.ci</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href="https://www.univ-na.ci/"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Liens utiles</h4>
+          <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">À propos</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Services étudiants</h4>
+          <ul>
+            <li><a href="#">Services universitaires</a></li>
+            <li><a href="https://croua2.ci/">Logement (CROU)</a></li>
+            <li><a href="https://croua2.ci/">Restauration</a></li>
+            <li><a href="https://croua2.ci/">Santé universitaire</a></li>
+            <li><a href="https://www.univ-na.ci/">Insertion professionnelle</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Bulletin d'information etudiant</h4>
+          <p>Recevez les actualités, événements et informations importantes
+          concernant la vie estudiantine à l'UNA!</p>
+
+          <form method="post">
+          {% csrf_token %}
+          <div class="newsletter-form">
+            <input type="email" name="email" placeholder="Votre email">
+            <input type="submit" value="S'inscrire">
+          </div>
+        </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>2025</span> <strong class="px-1 sitename">Université Nangui Abrogoua</strong> <span>— Vie Estudiantine</span></p>
+     
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+<script src="{% static 'mentor/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'mentor/assets/vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'mentor/assets/vendor/aos/aos.js' %}"></script>
+<script src="{% static 'mentor/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+<script src="{% static 'mentor/assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+<script src="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+<!-- Main JS File -->
+<script src="{% static 'mentor/assets/js/main.js' %}"></script>
+
+<!-- Custom Script for Navbar and Slider -->
+<script>
+  // Mobile Menu Toggle
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  if (mobileToggle && mobileNav) {
+    mobileToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('active');
+    });
+
+    // Close mobile menu when a link is clicked
+    const mobileNavLinks = mobileNav.querySelectorAll('a');
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+      });
+    });
+  }
+
+  // Slider Functionality (guarded)
+  (function () {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const nextBtn = document.getElementById('next-slide');
+    const prevBtn = document.getElementById('prev-slide');
+    const heroSlider = document.getElementById('hero-slider');
+
+    const totalSlides = slides ? slides.length : 0;
+    if (!heroSlider || totalSlides === 0 || dots.length === 0) {
+      // nothing to do on pages without a slider
+      return;
+    }
+
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function showSlide(n) {
+      if (n >= totalSlides) {
+        currentSlide = 0;
+      } else if (n < 0) {
+        currentSlide = totalSlides - 1;
+      } else {
+        currentSlide = n;
+      }
+
+      slides.forEach(slide => slide.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
+
+      slides[currentSlide].classList.add('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      currentSlide++;
+      showSlide(currentSlide);
+      resetAutoplay();
+    }
+
+    function prevSlide() {
+      currentSlide--;
+      showSlide(currentSlide);
+      resetAutoplay();
+    }
+
+    function autoplay() {
+      nextSlide();
+    }
+
+    function startAutoplay() {
+      autoplayInterval = setInterval(autoplay, 5000);
+    }
+
+    function resetAutoplay() {
+      clearInterval(autoplayInterval);
+      startAutoplay();
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        currentSlide = parseInt(dot.dataset.slide, 10) || 0;
+        showSlide(currentSlide);
+        resetAutoplay();
+      });
+    });
+
+    // Start autoplay on page load
+    startAutoplay();
+
+    // Pause autoplay on mouse enter, resume on mouse leave
+    heroSlider.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+    heroSlider.addEventListener('mouseleave', startAutoplay);
+  })();
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Actualités - UNA Vie Estudiantine</title>
+  <meta name="description" content="Découvrez les dernières actualités de l'UNA">
+  <meta name="keywords" content="actualités, UNA, vie estudiantine">
+
+  <!-- Favicons -->
+  <link rel="icon" sizes="32x32" href="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}">
+  <link rel="shortcut icon" href="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}">
+  <link href="{% static 'mentor/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'mentor/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'mentor/assets/css/main.css' %}" rel="stylesheet">
+  
+  <!-- Navbar Slider Custom CSS -->
+  <link href="{% static 'mentor/assets/css/navbar-slider-custom.css' %}" rel="stylesheet">
+</head>
+
+<body class="courses-page">
+
+  <!-- Navbar Header -->
+  <header class="navbar-header">
+    <div class="container-fluid container-xl">
+      <div class="navbar-content">
+        <!-- Logo -->
+        <a href="{% url 'vie_estudiantine_una:accueil' %}" class="logo-section">
+          <img src="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}" alt="Université Nangui Abrogoua — Abidjan" class="univ-logo">
+          <div class="logo-text">
+            <h1>UNA</h1>
+            <p>Vie Estudiantine</p>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:courses' %}" class="active">Actualités</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- CTA Button -->
+        <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta">UNA+</a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-toggle" id="mobile-toggle">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          <li style="border: none; padding: 15px 0;"><a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta" style="display: inline-block;">UNA+</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner" style="background-image: url('{% static 'mentor/assets/img/hero-bg.jpg' %}'); background-size: cover; background-position: center; height: 350px; position: relative; display: flex; align-items: center; justify-content: center;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 70, 135, 0.5); z-index: 1;"></div>
+    <div style="position: relative; z-index: 2; text-align: center; color: white; padding: 40px 20px;">
+      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 15px; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">Actualités</h1>
+      <p style="font-size: 20px; margin: 0; opacity: 0.95; text-shadow: 0 1px 4px rgba(0,0,0,0.2);">Les dernières nouvelles de votre communauté</p>
+    </div>
+    <nav style="position: absolute; bottom: 20px; left: 0; right: 0; z-index: 3;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; gap: 10px; color: white; font-size: 14px;">
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}" style="color: white; text-decoration: none; transition: opacity 0.3s;">Accueil</a></li>
+          <li style="opacity: 0.7;">/</li>
+          <li>Actualités</li>
+        </ol>
+      </div>
+    </nav>
+  </section>
+
+  <main class="main">
+
+    <!-- Courses Section -->
+    <section id="courses" class="courses section">
+
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="course-item">
+              <img src="{% static 'mentor/assets/img/course-1.jpg' %}" class="img-fluid" alt="...">
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4>Web Design</h4>
+                </div>
+                <p class="description">Quisquam vel ut sint occaecati deleniti. Porro assumenda rerum necessitatibus et. Voluptates quia maiores et sint ut dolores sit et. Rerum dignissimos deserunt voluptatibus.</p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    <img src="{% static 'mentor/assets/img/trainers/trainer-1.jpg' %}" class="img-fluid" alt="">
+                    <span>Antonio</span>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bi bi-person-circle"></i>&nbsp; 50
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Course Item-->
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
+            <div class="course-item">
+              <img src="{% static 'mentor/assets/img/course-2.jpg' %}" class="img-fluid" alt="...">
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4>Marketing</h4>
+                </div>
+                <p class="description">Quisquam vel ut sint occaecati deleniti. Porro assumenda rerum necessitatibus et. Voluptates quia maiores et sint ut dolores sit et. Rerum dignissimos deserunt voluptatibus.</p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    <img src="{% static 'mentor/assets/img/trainers/trainer-2.jpg' %}" class="img-fluid" alt="">
+                    <span>Lana</span>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bi bi-person-circle"></i>&nbsp; 35
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Course Item-->
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+            <div class="course-item">
+              <img src="{% static 'mentor/assets/img/course-3.jpg' %}" class="img-fluid" alt="...">
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4>Content Writing</h4>
+                </div>
+                <p class="description">Quisquam vel ut sint occaecati deleniti. Porro assumenda rerum necessitatibus et. Voluptates quia maiores et sint ut dolores sit et. Rerum dignissimos deserunt voluptatibus.</p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    <img src="{% static 'mentor/assets/img/trainers/trainer-3.jpg' %}" class="img-fluid" alt="">
+                    <span>Brandon</span>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bi bi-person-circle"></i>&nbsp; 48
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Course Item-->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Courses Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <img src="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}" alt="Université Nangui Abrogoua — Abidjan" style="max-height:40px; margin-right:8px;">
+            <span class="sitename">Vie Estudiantine UNA</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Université Nangui Abrogoua</p>
+            <p>Abidjan – Côte d'Ivoire</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+225 0501257670</span></p>
+            <p><strong>Email:</strong> <span>vieestudiantine@una.ci</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href="https://www.univ-na.ci/"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Liens utiles</h4>
+          <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">À propos</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Services étudiants</h4>
+          <ul>
+            <li><a href="#">Services universitaires</a></li>
+            <li><a href="https://croua2.ci/">Logement (CROU)</a></li>
+            <li><a href="https://croua2.ci/">Restauration</a></li>
+            <li><a href="https://croua2.ci/">Santé universitaire</a></li>
+            <li><a href="https://www.univ-na.ci/">Insertion professionnelle</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Bulletin d'information etudiant</h4>
+          <p>Recevez les actualités, événements et informations importantes
+          concernant la vie estudiantine à l'UNA!</p>
+
+          <form method="post">
+          {% csrf_token %}
+          <div class="newsletter-form">
+            <input type="email" name="email" placeholder="Votre email">
+            <input type="submit" value="S'inscrire">
+          </div>
+        </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>2025</span> <strong class="px-1 sitename">Université Nangui Abrogoua</strong> <span>— Vie Estudiantine</span></p>
+     
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'mentor/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'mentor/assets/js/main.js' %}"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    if (mobileToggle && mobileNav) {
+      mobileToggle.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+      });
+
+      const mobileNavLinks = mobileNav.querySelectorAll('a');
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.remove('active');
+        });
+      });
+    }
+  </script>
+
+  <!-- Responsive Banner CSS -->
+  <style>
+    @media (max-width: 1200px) {
+      .page-banner h1 {
+        font-size: 42px !important;
+      }
+      .page-banner p {
+        font-size: 18px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-banner {
+        height: 280px !important;
+      }
+      .page-banner h1 {
+        font-size: 28px !important;
+      }
+      .page-banner p {
+        font-size: 16px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-banner {
+        height: 220px !important;
+      }
+      .page-banner h1 {
+        font-size: 22px !important;
+      }
+      .page-banner p {
+        font-size: 14px !important;
+      }
+    }
+  </style>
+
+</body>
+
+</html>

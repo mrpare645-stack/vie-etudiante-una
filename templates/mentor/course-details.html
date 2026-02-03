@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Détails Actualité - UNA Vie Estudiantine</title>
+  <meta name="description" content="Découvrez les détails de l'actualité">
+  <meta name="keywords" content="actualité, détails, UNA, vie estudiantine">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/webp" sizes="32x32" href="{% static 'mentor/assets/img/logo.webp' %}">
+  <link rel="shortcut icon" href="{% static 'mentor/assets/img/logo.webp' %}" type="image/webp">
+  <link href="{% static 'mentor/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'mentor/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'mentor/assets/css/main.css' %}" rel="stylesheet">
+  
+  <!-- Navbar Slider Custom CSS -->
+  <link href="{% static 'mentor/assets/css/navbar-slider-custom.css' %}" rel="stylesheet">
+</head>
+
+<body class="course-details-page">
+
+  <!-- Navbar Header -->
+  <header class="navbar-header">
+    <div class="container-fluid container-xl">
+      <div class="navbar-content">
+        <!-- Logo -->
+        <a href="{% url 'vie_estudiantine_una:accueil' %}" class="logo-section">
+          <img src="{% static 'mentor/assets/img/logo.webp' %}" alt="UNA Logo">
+          <div class="logo-text">
+            <h1>UNA</h1>
+            <p>Vie Estudiantine</p>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:courses' %}" class="active">Actualités</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- CTA Button -->
+        <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta">UNA+</a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-toggle" id="mobile-toggle">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
+          <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
+          <li style="border: none; padding: 15px 0;"><a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta" style="display: inline-block;">UNA+</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner" style="background-image: url('{% static 'mentor/assets/img/hero-bg.jpg' %}'); background-size: cover; background-position: center; height: 350px; position: relative; display: flex; align-items: center; justify-content: center;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 70, 135, 0.5); z-index: 1;"></div>
+    <div style="position: relative; z-index: 2; text-align: center; color: white; padding: 40px 20px;">
+      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 15px; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">Détails Actualité</h1>
+      <p style="font-size: 20px; margin: 0; opacity: 0.95; text-shadow: 0 1px 4px rgba(0,0,0,0.2);">Article complet et détaillé</p>
+    </div>
+    <nav style="position: absolute; bottom: 20px; left: 0; right: 0; z-index: 3;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; gap: 10px; color: white; font-size: 14px;">
+          <li><a href="{% url 'vie_estudiantine_una:accueil' %}" style="color: white; text-decoration: none; transition: opacity 0.3s;">Accueil</a></li>
+          <li style="opacity: 0.7;">/</li>
+          <li><a href="{% url 'vie_estudiantine_una:courses' %}" style="color: white; text-decoration: none; transition: opacity 0.3s;">Actualités</a></li>
+          <li style="opacity: 0.7;">/</li>
+          <li>Détails</li>
+        </ol>
+      </div>
+    </nav>
+  </section>
+
+  <main class="main">
+
+    <!-- Course Details Section -->
+    <section id="course-details" class="course-details section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        {% if actualite %}
+        <div class="row">
+
+          <div class="col-lg-8">
+
+            {% if actualite.image %}
+            <img src="{{ actualite.image.url }}" class="img-fluid mb-5" alt="{{ actualite.titre }}">
+            {% endif %}
+
+            <h3>{{ actualite.titre }}</h3>
+
+            <p class="fst-italic">
+              <strong>Auteur:</strong> {{ actualite.nom_auteur }} | 
+              <strong>Date:</strong> {{ actualite.date_pub|date:"d M Y" }}
+            </p>
+
+            <h4>Résumé</h4>
+
+            <p>
+              {{ actualite.resume }}
+            </p>
+
+            <h4>Contenu Complet</h4>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p style="white-space: pre-wrap;">
+                {{ actualite.description }}
+              </p>
+            </div>
+
+            <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #004687;">
+              <p><strong><i class="bi bi-info-circle"></i> Informations supplémentaires:</strong></p>
+              <ul style="margin-bottom: 0;">
+                <li>Catégorie: <strong>{{ actualite.categorie }}</strong></li>
+                <li>Vues: <strong>{{ actualite.vues }}</strong></li>
+                <li>Likes: <strong>{{ actualite.likes }}</strong></li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="col-lg-4">
+
+            {% if actualite.image_auteur %}
+            <div class="course-info d-flex align-items-center mb-4" style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+              <img src="{{ actualite.image_auteur.url }}" alt="{{ actualite.nom_auteur }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+              <div>
+                <h5 style="margin-bottom: 5px;">Auteur</h5>
+                <p style="margin: 0;">{{ actualite.nom_auteur }}</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+              <h5 style="margin: 0;">Date de publication</h5>
+              <p style="margin: 0;">{{ actualite.date_pub|date:"d/m/Y" }}</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+              <h5 style="margin: 0;">Catégorie</h5>
+              <p style="margin: 0;"><span class="badge bg-primary">{{ actualite.categorie }}</span></p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+              <h5 style="margin: 0;">Vues</h5>
+              <p style="margin: 0;"><i class="bi bi-eye"></i> {{ actualite.vues }}</p>
+            </div>
+
+            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+              <h5 style="margin: 0;">J'aime</h5>
+              <p style="margin: 0;"><i class="bi bi-heart"></i> {{ actualite.likes }}</p>
+            </div>
+
+            <div style="margin-top: 20px;">
+              <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn btn-primary w-100">
+                <i class="bi bi-arrow-left"></i> Retour aux actualités
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+        {% else %}
+        <div class="row">
+          <div class="col-12 text-center">
+            <h4>Article non trouvé</h4>
+            <p>Désolé, l'actualité que vous recherchez n'existe pas.</p>
+            <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn btn-primary">
+              <i class="bi bi-arrow-left"></i> Retour aux actualités
+            </a>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+    </section><!-- /Course Details Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Vie Estudiantine UNA</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Université Nangui Abrogoua</p>
+            <p>Abidjan – Côte d'Ivoire</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+225 0501257670</span></p>
+            <p><strong>Email:</strong> <span>vieestudiantine@una.ci</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href="https://www.univ-na.ci/"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.univ-na.ci/"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Liens utiles</h4>
+          <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">À propos</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Services étudiants</h4>
+          <ul>
+            <li><a href="#">Services universitaires</a></li>
+            <li><a href="https://croua2.ci/">Logement (CROU)</a></li>
+            <li><a href="https://croua2.ci/">Restauration</a></li>
+            <li><a href="https://croua2.ci/">Santé universitaire</a></li>
+            <li><a href="https://www.univ-na.ci/">Insertion professionnelle</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Bulletin d'information etudiant</h4>
+          <p>Recevez les actualités, événements et informations importantes
+          concernant la vie estudiantine à l'UNA!</p>
+
+          <form method="post">
+          {% csrf_token %}
+          <div class="newsletter-form">
+            <input type="email" name="email" placeholder="Votre email">
+            <input type="submit" value="S'inscrire">
+          </div>
+        </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>2025</span> <strong class="px-1 sitename">Université Nangui Abrogoua</strong> <span>— Vie Estudiantine</span></p>
+     
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'mentor/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'mentor/assets/js/main.js' %}"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    if (mobileToggle && mobileNav) {
+      mobileToggle.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+      });
+
+      const mobileNavLinks = mobileNav.querySelectorAll('a');
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.remove('active');
+        });
+      });
+    }
+  </script>
+
+  <!-- Responsive Banner CSS -->
+  <style>
+    @media (max-width: 1200px) {
+      .page-banner h1 {
+        font-size: 42px !important;
+      }
+      .page-banner p {
+        font-size: 18px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-banner {
+        height: 280px !important;
+      }
+      .page-banner h1 {
+        font-size: 28px !important;
+      }
+      .page-banner p {
+        font-size: 16px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-banner {
+        height: 220px !important;
+      }
+      .page-banner h1 {
+        font-size: 22px !important;
+      }
+      .page-banner p {
+        font-size: 14px !important;
+      }
+    }
+  </style>
+
+</body>
+
+</html>
