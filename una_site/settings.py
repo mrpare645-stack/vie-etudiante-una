@@ -124,12 +124,12 @@ WSGI_APPLICATION = 'una_site.wsgi.application'
 if os.environ.get('DB_NAME'):
     DATABASES = {
         'default': {
-            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-            'NAME': os.environ['Una_site_db'],
-            'USER': os.environ.get('admin', ''),
-            'PASSWORD': os.environ.get('Bonjour2026@', ''),
-            'HOST': os.environ.get('DB_HOST', 'db'),
-            'PORT': os.environ.get('DB_PORT', '5432'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('una_site_db'),
+            'USER': os.environ.get('una_site_db_user'),
+            'PASSWORD': os.environ.get('stT2eZlnK9XSRUzq9ydz5WUEKAg3dKYy'),
+            'HOST': os.environ.get('dpg-d7v6ne9j2pic73e6bcgg-a', 'db'),
+            'PORT': os.environ.get('5432', '5432'),
         }
     }
 else:
@@ -205,4 +205,14 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('gwnF37Er8RIT4E0ofHeN2u4prE'),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
+
