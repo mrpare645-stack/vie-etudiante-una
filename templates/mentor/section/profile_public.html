@@ -1,0 +1,179 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+
+{% block contenu_principal %}
+<style>
+    :root {
+        --una-green: #1a5c37;
+        --una-light-green: #27ae60;
+        --soft-gray: #f8f9fa;
+    }
+
+    .profile-header-card {
+        border-radius: 20px;
+        overflow: hidden;
+        border: none;
+        background: #fff;
+    }
+
+    .profile-banner {
+        background: linear-gradient(135deg, var(--una-green) 0%, var(--una-light-green) 100%);
+        height: 180px;
+    }
+
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 5px solid #fff;
+        margin-top: -70px;
+        background-color: #fff;
+    }
+
+    .stat-box {
+        padding: 10px 20px;
+        border-radius: 12px;
+        transition: 0.3s;
+    }
+    .stat-box:hover { background-color: var(--soft-gray); }
+    .stat-value { font-size: 1.25rem; font-weight: 800; color: #333; }
+    .stat-label { font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; }
+
+    .post-card {
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+    .post-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .post-img-container {
+        height: 220px;
+        overflow: hidden;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        background-color: #eee;
+    }
+
+    .btn-action {
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+</style>
+
+<div class="container py-5 mt-5">
+    <div class="card profile-header-card shadow-sm mb-5">
+        <div class="profile-banner"></div>
+        <div class="card-body text-center pt-0 px-4 pb-5">
+            <img src="{{ profile_user.profile.photo.url }}" class="rounded-circle profile-avatar shadow">
+            
+            <div class="mt-3">
+                <h2 class="fw-bold mb-0 text-dark">{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+                <p class="text-muted small">
+                    <span class="text-success fw-bold">@{{ profile_user.username }}</span> • 
+                    <i class="bi bi-mortarboard-fill me-1"></i>{{ profile_user.profile.filiere.nom|default:"Étudiant UNA" }}
+                </p>
+            </div>
+
+            {% if profile_user.profile.bio %}
+            <div class="mx-auto my-3" style="max-width: 650px;">
+                <p class="text-secondary italic mb-0">" {{ profile_user.profile.bio }} "</p>
+            </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-center flex-wrap gap-2 gap-md-5 my-4">
+                <div class="stat-box">
+                    <div class="stat-value">{{ posts.count }}</div>
+                    <div class="stat-label">Publications</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ followers_count }}</div>
+                    <div class="stat-label">Abonnés</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ following_count }}</div>
+                    <div class="stat-label">Abonnements</div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+                {% if request.user != profile_user %}
+                    <a href="{% url 'vie_estudiantine_una:toggle_follow_user' profile_user.username %}" 
+                       class="btn btn-action {% if is_following %}btn-outline-secondary{% else %}btn-success{% endif %} shadow-sm">
+                        {% if is_following %}
+                            <i class="bi bi-person-check-fill me-2"></i>Abonné
+                        {% else %}
+                            <i class="bi bi-person-plus-fill me-2"></i>Suivre
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'vie_estudiantine_una:start_chat' profile_user.username %}" class="btn btn-action btn-outline-primary shadow-sm">
+                        <i class="bi bi-chat-left-dots-fill me-2"></i>Message
+                    </a>
+                {% else %}
+                    <a href="{% url 'vie_estudiantine_una:edit_profile' %}" class="btn btn-action btn-outline-dark shadow-sm">
+                        <i class="bi bi-pencil-square me-2"></i>Modifier mon profil
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">Récemment publié</h4>
+        <div class="dropdown">
+            <button class="btn btn-sm btn-light rounded-pill border" type="button" data-bs-toggle="dropdown">
+                Trier par <i class="bi bi-filter ms-1"></i>
+            </button>
+            <ul class="dropdown-menu border-0 shadow-sm">
+                <li><a class="dropdown-item small" href="#">Plus récent</a></li>
+                <li><a class="dropdown-item small" href="#">Plus aimé</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 post-card shadow-sm">
+                {% if post.image %}
+                <div class="post-img-container">
+                    <img src="{{ post.image.url }}" class="w-100 h-100" style="object-fit: cover;">
+                </div>
+                {% else %}
+                <div class="post-img-container d-flex align-items-center justify-content-center bg-light">
+                    <i class="bi bi-chat-right-quote display-4 text-white opacity-50"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-light text-muted fw-normal rounded-pill">
+                            <i class="bi bi-calendar3 me-1"></i> {{ post.created_at|date:"d M Y" }}
+                        </span>
+                    </div>
+                    <p class="card-text text-dark">{{ post.content|truncatechars:120 }}</p>
+                </div>
+                
+                <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                    <div class="d-flex align-items-center gap-3 text-muted small">
+                        <span><i class="bi bi-heart-fill text-danger me-1"></i> {{ post.likes_count }}</span>
+                        <span><i class="bi bi-chat-fill text-primary me-1"></i> {{ post.comments_count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-camera display-1 text-light"></i>
+                <p class="mt-3 text-muted">Aucune publication pour le moment.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

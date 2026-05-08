@@ -1,0 +1,286 @@
+{% load static %}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #004687;
+        --primary-light: rgba(0, 70, 135, 0.08);
+        --dark-text: #1a1a1a;
+        --light-text: #64748b;
+        --bg-navbar: rgba(255, 255, 255, 0.95);
+        --border-color: rgba(0,0,0,0.08);
+        --nav-height: 80px;
+    }
+
+    body.dark-mode {
+        --primary: #2ecc71;
+        --primary-light: rgba(46, 204, 113, 0.1);
+        --dark-text: #f8fafc;
+        --light-text: #94a3b8;
+        --bg-body: #0f172a;
+        --bg-navbar: rgba(15, 23, 42, 0.95);
+        --border-color: rgba(255,255,255,0.1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        padding-top: var(--nav-height);
+        transition: background 0.3s ease;
+    }
+
+    /* --- Navbar Styling --- */
+    .navbar-header {
+        background: var(--bg-navbar) !important;
+        backdrop-filter: blur(10px);
+        height: var(--nav-height);
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-color);
+        display: flex; align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .nav-container {
+        display: flex; align-items: center; justify-content: space-between;
+        width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px;
+    }
+
+    /* Logo & Brand */
+    .brand-link { display: flex; align-items: center; gap: 12px; text-decoration: none !important; }
+    .brand-img { height: 50px; width: auto; transition: 0.3s; }
+    .brand-name { color: var(--primary); font-weight: 800; font-size: 22px; margin: 0; }
+    .brand-tagline { color: var(--light-text); font-size: 11px; text-transform: uppercase; font-weight: 600; }
+
+    /* Main Navigation */
+    .main-nav-list { display: flex; list-style: none; margin: 0; padding: 0; gap: 5px; align-items: center; }
+    
+    .nav-item-link {
+        color: var(--dark-text) !important;
+        text-decoration: none !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 8px 15px;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .nav-item-link:hover, .nav-item-link.active {
+        color: var(--primary) !important;
+        background: var(--primary-light);
+    }
+
+    /* Dropdown customization */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        padding: 10px;
+        background: var(--bg-navbar);
+    }
+    .dropdown-item {
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 500;
+        color: var(--dark-text);
+    }
+    .dropdown-item:hover { background: var(--primary-light); color: var(--primary); }
+
+    /* Icons & Buttons */
+    .theme-btn {
+        background: none; border: none; font-size: 1.2rem;
+        color: var(--primary); cursor: pointer;
+        padding: 8px; border-radius: 10px;
+        transition: 0.3s;
+    }
+    .theme-btn:hover { background: var(--primary-light); transform: scale(1.1); }
+
+    .btn-una-portal {
+        background: var(--primary) !important;
+        color: white !important;
+        padding: 10px 18px; border-radius: 50px;
+        font-weight: 700; text-decoration: none !important;
+        display: flex; align-items: center; gap: 8px; font-size: 13px;
+        transition: 0.3s;
+    }
+    .btn-una-portal:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,70,135,0.2); }
+
+    /* Burger Menu */
+    .burger-menu { display: none; background: none; border: none; }
+    .burger-bar { display: block; width: 25px; height: 3px; background: var(--primary); margin: 5px 0; border-radius: 3px; }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .desktop-menu { display: none; }
+        .burger-menu { display: block; }
+    }
+
+    /* Mobile Sidebar */
+    .mobile-sidebar {
+        position: fixed; top: 0; right: -100%;
+        width: 300px; height: 100vh;
+        background: var(--bg-navbar);
+        z-index: 10000;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+        transition: 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+        padding: 40px 25px;
+    }
+    .mobile-sidebar.active { right: 0; }
+    .mobile-nav-list { list-style: none; padding: 0; }
+    .mobile-nav-list a { 
+        color: var(--dark-text); font-size: 16px; font-weight: 600; 
+        text-decoration: none; display: flex; align-items: center; gap: 10px;
+        padding: 12px 0; border-bottom: 1px solid var(--border-color);
+    }
+</style>
+
+<div class="una-navbar-wrapper">
+    <header class="navbar-header">
+        <div class="nav-container">
+            
+            <a href="{% url 'vie_estudiantine_una:accueil' %}" class="brand-link">
+                <img src="{% static 'mentor/assets/img/nangui_abrogoua_logo.png' %}" alt="Logo UNA" class="brand-img">
+                <div class="brand-text-group d-none d-md-block">
+                    <span class="brand-name">UNA</span>
+                    <br><span class="brand-tagline">Vie Estudiantine</span>
+                </div>
+            </a>
+
+            <nav class="desktop-menu">
+                <ul class="main-nav-list">
+                    <li><a href="{% url 'vie_estudiantine_una:accueil' %}" class="nav-item-link">Accueil</a></li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-item-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Université</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:pages' 'about' %}">À propos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:pages' 'actualites' %}">Actualités</a></li>
+                            <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:pages' 'contact' %}">Contact</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'vie_estudiantine_una:pages' 'club' %}" class="nav-item-link">Clubs</a></li>
+                    <li><a href="{% url 'vie_estudiantine_una:pages' 'events' %}" class="nav-item-link">Événements</a></li>
+                    <li><a href="{% url 'vie_estudiantine_una:pages' 'crouA2' %}" class="nav-item-link">CROUA2</a></li>
+
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'vie_estudiantine_una:social_feed' %}" class="nav-item-link">
+                            <i class="bi bi-people-fill me-1"></i> Réseau
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'vie_estudiantine_una:notifications' %}" class="nav-item-link position-relative px-2">
+                            <i class="bi bi-bell"></i>
+                            {% if unread_notifs_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                    {{ unread_notifs_count }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <div class="header-right d-flex align-items-center gap-2">
+                
+                <button id="theme-toggle" class="theme-btn">
+                    <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                </button>
+
+                {% if user.is_authenticated %}
+                <div class="dropdown d-none d-lg-block">
+                    <a href="#" class="nav-item-link dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-5"></i>
+                        <span class="small">{{ user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:student_dashboard' %}"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:edit_profile' %}"><i class="bi bi-person-gear me-2"></i>Profil</a></li>
+                        {% if user.is_superuser %}
+                        <li><a class="dropdown-item" href="{% url 'vie_estudiantine_una:admin_dashboard' %}"><i class="bi bi-shield-check me-2"></i>Administration</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'vie_estudiantine_una:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="d-none d-lg-flex gap-2">
+                    <a href="{% url 'vie_estudiantine_una:login' %}" class="btn btn-sm fw-bold px-3">Connexion</a>
+                    <a href="{% url 'vie_estudiantine_una:register' %}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">Inscription</a>
+                </div>
+                {% endif %}
+
+                <a href="https://www.univ-na.ci/" class="btn-una-portal d-none d-sm-flex">
+                    <span>UNA+</span> <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+
+                <button class="burger-menu" id="openMobileMenu">
+                    <span class="burger-bar"></span>
+                    <span class="burger-bar"></span>
+                    <span class="burger-bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-sidebar" id="sidebarMenu">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="m-0 fw-bold text-primary">Menu</h5>
+            <button class="btn-close" id="closeMobileMenu"></button>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="p-3 bg-light rounded-3 mb-4 d-flex align-items-center gap-3">
+            <i class="bi bi-person-circle fs-2 text-primary"></i>
+            <div>
+                <div class="fw-bold">{{ user.username }}</div>
+                <a href="{% url 'vie_estudiantine_una:edit_profile' %}" class="small text-decoration-none">Mon profil</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <ul class="mobile-nav-list">
+            <li><a href="{% url 'vie_estudiantine_una:accueil' %}"><i class="bi bi-house"></i> Accueil</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'actualites' %}"><i class="bi bi-newspaper"></i> Actualités</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'club' %}"><i class="bi bi-trophy"></i> Clubs</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'events' %}"><i class="bi bi-calendar-event"></i> Événements</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'crouA2' %}"><i class="bi bi-building"></i> CROUA2</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'about' %}"><i class="bi bi-info-circle"></i> À propos</a></li>
+            <li><a href="{% url 'vie_estudiantine_una:pages' 'contact' %}"><i class="bi bi-envelope"></i> Contact</a></li>
+            
+            {% if not user.is_authenticated %}
+            <li class="pt-4 border-0">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'vie_estudiantine_una:login' %}" class="btn btn-outline-primary">Connexion</a>
+                    <a href="{% url 'vie_estudiantine_una:register' %}" class="btn btn-primary">Inscription</a>
+                </div>
+            </li>
+            {% else %}
+            <li><a href="{% url 'vie_estudiantine_una:logout' %}" class="text-danger"><i class="bi bi-box-arrow-right"></i> Déconnexion</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Theme Switcher
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    });
+
+    // Mobile Menu Logic
+    const openMenu = document.getElementById('openMobileMenu');
+    const closeMenu = document.getElementById('closeMobileMenu');
+    const sidebar = document.getElementById('sidebarMenu');
+
+    openMenu.addEventListener('click', () => sidebar.classList.add('active'));
+    closeMenu.addEventListener('click', () => sidebar.classList.remove('active'));
+</script>

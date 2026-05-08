@@ -1,0 +1,159 @@
+<section id="counts" class="section-stats-elite">
+  <div class="container">
+    <div class="stats-glass-container" data-aos="zoom-in" data-aos-delay="100">
+      <div class="row gy-5">
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-box">
+            <div class="stat-icon-circle">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">
+                <span data-purecounter-start="0" data-purecounter-end="{{ stat_etudiants }}" data-purecounter-duration="1.5" class="purecounter">{{ stat_etudiants }}</span><span class="plus">+</span>
+              </div>
+              <p class="stat-label">Étudiants</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-box">
+            <div class="stat-icon-circle">
+              <i class="bi bi-newspaper"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">
+                <span data-purecounter-start="0" data-purecounter-end="{{ stat_actualites }}" data-purecounter-duration="1.5" class="purecounter">{{ stat_actualites }}</span>
+              </div>
+              <p class="stat-label">Actualités</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-box">
+            <div class="stat-icon-circle">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">
+                <span data-purecounter-start="0" data-purecounter-end="{{ stat_events }}" data-purecounter-duration="1.5" class="purecounter">{{ stat_events }}</span><span class="plus">+</span>
+              </div>
+              <p class="stat-label">Événements</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat-box">
+            <div class="stat-icon-circle">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">
+                <span data-purecounter-start="0" data-purecounter-end="{{ stat_clubs }}" data-purecounter-duration="1.5" class="purecounter">{{ stat_clubs }}</span>
+              </div>
+              <p class="stat-label">Clubs Actifs</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-stats-elite {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #1a5c37 0%, #0d311d 100%);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Décoration d'arrière-plan (Cercles subtils) */
+  .section-stats-elite::before {
+    content: "";
+    position: absolute;
+    top: -50px; left: -50px;
+    width: 200px; height: 200px;
+    background: rgba(39, 174, 96, 0.1);
+    border-radius: 50%;
+  }
+
+  .stats-glass-container {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 60px 40px;
+  }
+
+  .stat-box {
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .stat-box:hover {
+    transform: translateY(-10px);
+  }
+
+  .stat-icon-circle {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(39, 174, 96, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 28px;
+    color: #27ae60;
+    transition: 0.4s;
+  }
+
+  .stat-box:hover .stat-icon-circle {
+    background: #27ae60;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+  }
+
+  .stat-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .stat-number .plus {
+    color: #27ae60;
+    font-size: 30px;
+    margin-left: 2px;
+  }
+
+  .stat-label {
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 991px) {
+    .stats-glass-container {
+      padding: 40px 20px;
+    }
+    .stat-number {
+      font-size: 32px;
+    }
+  }
+</style>

@@ -1,118 +1,76 @@
 from django.contrib import admin
-
+from django.utils.html import format_html
 from .models import (
-    Actualite,
-    Filiere,
-    AboutUNA,
-    Acteur,
-    Temoin,
-    Club_association,
-    Evenement,
-    ServiceCROU,
-    Temoignage,
-    Categorie,
-    OffreLogement,
-    Partenaire,
-    Slide,
+    Actualite, Banner, Filiere, AboutUNA, Acteur, Temoin, 
+    Club_association, Evenement, ServiceCROU,
+    Categorie,  Partenaire, Slide, Statistique
 )
 
-# Personnalisation de l'en-tête admin
-admin.site.site_header = "Administration UNA - Vie Estudiantine"
-admin.site.site_title = "Admin UNA"
-admin.site.index_title = "Bienvenue à l'administration"
+# --- Mixin pour les miniatures ---
+class ImagePreviewMixin:
+    def apercu_image(self, obj):
+        for field in ['image', 'photo', 'icone', 'icon', 'logo']: # Ajout de 'logo' pour les clubs
+            if hasattr(obj, field) and getattr(obj, field):
+                try:
+                    url = getattr(obj, field).url
+                    return format_html('<img src="{}" style="width: 45px; height: 45px; border-radius: 5px; object-fit: cover;" />', url)
+                except:
+                    continue
+        return "No Image"
+    apercu_image.short_description = "Aperçu"
 
+# --- Administrations Spécifiques ---
 
 @admin.register(Actualite)
-class ActualiteAdmin(admin.ModelAdmin):
-    list_display = ("titre", "categorie", "nom_auteur", "date_pub", "vues", "likes")
-    list_filter = ("categorie", "date_pub")
-    search_fields = ("titre", "resume", "nom_auteur")
-    readonly_fields = ("date_pub", "vues", "likes")
-
-
-@admin.register(Evenement)
-class EvenementAdmin(admin.ModelAdmin):
-    list_display = ("titre",)
-    search_fields = ("titre", "description")
-
-
-@admin.register(ServiceCROU)
-class ServiceCROUAdmin(admin.ModelAdmin):
-    list_display = ("nom", "categorie", "localisation", "contact")
-    list_filter = ("categorie",)
-    search_fields = ("nom", "description", "localisation")
-
-
-@admin.register(Filiere)
-class FiliereAdmin(admin.ModelAdmin):
-    list_display = ("nom", "icon")
-    search_fields = ("nom",)
-
-
-@admin.register(AboutUNA)
-class AboutUNAAdmin(admin.ModelAdmin):
-    list_display = ("titre",)
-
-
-@admin.register(Acteur)
-class ActeurAdmin(admin.ModelAdmin):
-    list_display = ("nom", "role")
-    search_fields = ("nom", "role")
-
-
-@admin.register(Temoin)
-class TemoinAdmin(admin.ModelAdmin):
-    list_display = ("nom", "promotion")
-    search_fields = ("nom", "promotion", "message")
-
-
-@admin.register(Club_association)
-class ClubAssociationAdmin(admin.ModelAdmin):
-    list_display = ("nom_club", "domaine")
-    list_filter = ("domaine",)
-    search_fields = ("nom_club", "description", "domaine")
-
-
-@admin.register(Temoignage)
-class TemoignageAdmin(admin.ModelAdmin):
-    list_display = (
-        "etudiant_nom",
-        "filiere",
-        "promotion",
-        "date_publication",
-        "est_approuve",
-    )
-    list_filter = ("filiere", "est_approuve", "date_publication")
-    search_fields = ("etudiant_nom", "filiere", "message")
-    readonly_fields = ("date_publication",)
-
-
-@admin.register(OffreLogement)
-class OffreLogementAdmin(admin.ModelAdmin):
-    list_display = ("titre", "type_logement", "prix", "est_disponible")
-    list_filter = ("type_logement", "est_disponible", "date_publication")
-    search_fields = ("titre", "lieu", "description")
-    readonly_fields = ("date_publication",)
-
-
-@admin.register(Partenaire)
-class PartenaireAdmin(admin.ModelAdmin):
-    list_display = ("nom", "domaine")
-    list_filter = ("domaine",)
-    search_fields = ("nom", "description", "domaine")
-
-
-@admin.register(Categorie)
-class CategorieAdmin(admin.ModelAdmin):
-    list_display = ("nom", "icone")
-    search_fields = ("nom",)
-
+class ActualiteAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ('apercu_image', 'titre', 'categorie', 'date_pub', 'vues')
+    list_display_links = ('titre',)
+    list_filter = ('categorie', 'date_pub')
+    search_fields = ('titre', 'resume', 'nom_auteur')
 
 @admin.register(Slide)
-class SlideAdmin(admin.ModelAdmin):
-    list_display = ("titre", "ordre", "actif", "date_publication")
-    list_filter = ("actif",)
-    search_fields = ("titre", "sous_titre", "bouton_texte")
+class SlideAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ("apercu_image", "ordre", "titre", "actif")
+    list_editable = ("ordre", "actif")
+    list_display_links = ("titre",)
     ordering = ("ordre",)
-    readonly_fields = ("date_publication",)
 
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    # On affiche la colonne 'page' pour savoir quelle bannière va où
+    list_display = ("apercu_image", "page", "titre", "actif")
+    list_editable = ("actif", "page")
+    list_filter = ("page", "actif")
+
+@admin.register(Club_association)
+class ClubAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ("apercu_image", "nom_club", "domaine", "is_approved")
+    search_fields = ("nom_club",)
+
+# --- Groupement pour les autres modèles ---
+
+@admin.register(Filiere, Categorie, Partenaire, Acteur, ServiceCROU)
+class NameBasedAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ("nom", "apercu_image")
+    search_fields = ("nom",)
+
+@admin.register(Evenement, AboutUNA)
+class TitleBasedAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ("titre", "apercu_image")
+    search_fields = ("titre",)
+
+@admin.register(Temoin)
+class TemoinAdmin(admin.ModelAdmin, ImagePreviewMixin):
+    list_display = ("nom", "promotion", "apercu_image", "is_approved")
+    list_filter = ("is_approved", "promotion")
+    search_fields = ("nom", "message")
+
+@admin.register(Statistique)
+class StatistiqueAdmin(admin.ModelAdmin):
+    list_display = ("nombre_etudiants", "nombre_enseignants")
+    
+    def has_add_permission(self, request):
+        # Empêche de créer plus d'une instance de configuration pour garder un seul jeu de stats
+        if self.model.objects.exists():
+            return False
+        return super().has_add_permission(request)

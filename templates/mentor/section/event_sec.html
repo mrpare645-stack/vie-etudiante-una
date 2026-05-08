@@ -1,0 +1,205 @@
+<section id="events" class="events-premium-section py-5">
+  <div class="container section-title" data-aos="fade-up">
+    <div class="elite-label">Calendrier Universitaire</div>
+    <h2 class="fw-bold">Événements & <span class="text-green">Conférences</span></h2>
+    <p class="text-muted">Ne manquez aucun rendez-vous. Vous organisez un événement ? Proposez-le à la communauté.</p>
+  </div>
+
+  <div class="container">
+    <div class="d-flex justify-content-end mb-5">
+      <button class="btn-create-event" onclick="ouvrirFormulaire()">
+        <i class="bi bi-calendar-plus-fill me-2"></i> Publier un événement
+      </button>
+    </div>
+
+    <div class="row gy-4">
+      {% for event in evenements %}
+      <div class="col-lg-6">
+        <div class="event-card-horizontal">
+          <div class="event-img-side">
+            {% if event.photo %}
+            <img src="{{ event.photo.url }}" alt="{{ event.titre }}">
+            {% else %}
+            <div class="event-placeholder"><i class="bi bi-image"></i></div>
+            {% endif %}
+            <div class="event-date-tag">
+              <span class="day">{{ event.date_publication|date:"d" }}</span>
+              <span class="month">{{ event.date_publication|date:"M" }}</span>
+            </div>
+          </div>
+          
+          <div class="event-content-side">
+            <h3>{{ event.titre }}</h3>
+            <div class="event-info-pills">
+              <span><i class="bi bi-geo-alt"></i> Campus UNA</span>
+              <span><i class="bi bi-clock"></i> {{ event.date_publication|date:"H:i" }}</span>
+            </div>
+            <p>{{ event.description|truncatechars:120 }}</p>
+            
+            <a href="javascript:void(0)" 
+               class="btn-event-details"
+               onclick="afficherDetails(this)"
+               data-titre="{{ event.titre }}"
+               data-desc="{{ event.description }}"
+               data-date="{{ event.date_publication|date:'d M Y à H:i' }}"
+               data-img="{% if event.photo %}{{ event.photo.url }}{% endif %}">
+               Détails <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+          <p class="text-muted">Aucun événement prévu pour le moment.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="custom-modal-overlay" id="detailsModal" style="display:none;">
+    <div class="custom-modal-content details-wide">
+      <button class="close-modal-btn" onclick="fermerDetails()">&times;</button>
+      <img src="" id="mdl-img" class="modal-main-img">
+      <div class="p-4">
+        <h2 id="mdl-titre" class="fw-bold mb-2 text-dark"></h2>
+        <p id="mdl-date" class="text-success fw-bold small mb-3"></p>
+        <div class="accent-separator"></div>
+        <p id="mdl-desc" class="modal-description text-muted"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-modal-overlay" id="pubModal" style="display:none;">
+    <div class="custom-modal-content p-4">
+      <button class="close-modal-btn" onclick="fermerFormulaire()">&times;</button>
+      <h3 class="fw-bold mb-3">Proposer un événement</h3>
+      <form id="addEventForm" class="row g-3">
+        <div class="col-12">
+          <label class="form-label small fw-bold">Titre</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Date</label>
+          <input type="date" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Heure</label>
+          <input type="time" class="form-control">
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-bold">Description</label>
+          <textarea class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="col-12 mt-4">
+          <button type="submit" class="btn-submit-now">Envoyer pour validation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .events-premium-section { background: #fdfdfd; }
+  .text-green { color: #27ae60; }
+  .elite-label {
+    display: inline-block; background: rgba(39, 174, 96, 0.1); color: #1a5c37;
+    padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
+  }
+
+  /* Cartes Événements */
+  .event-card-horizontal {
+    background: white; border-radius: 20px; border: 1px solid #eee;
+    display: flex; overflow: hidden; height: 100%; transition: 0.3s ease;
+  }
+  .event-card-horizontal:hover { border-color: #27ae60; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+  .event-img-side { position: relative; width: 200px; flex-shrink: 0; }
+  .event-img-side img { width: 100%; height: 100%; object-fit: cover; }
+  .event-date-tag {
+    position: absolute; top: 10px; left: 10px; background: white;
+    padding: 5px 12px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .event-date-tag .day { display: block; font-size: 1.1rem; font-weight: 900; color: #1a5c37; }
+  .event-date-tag .month { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; }
+
+  .event-content-side { padding: 20px; display: flex; flex-direction: column; }
+  .event-info-pills { display: flex; gap: 10px; font-size: 12px; color: #27ae60; font-weight: 600; margin-bottom: 10px; }
+  .btn-event-details { color: #1a5c37; text-decoration: none; font-weight: 700; font-size: 13px; margin-top: auto; cursor: pointer; }
+
+  /* Système de Modal Robuste */
+  .custom-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 99999;
+    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+  }
+  .custom-modal-content {
+    background: white; width: 90%; max-width: 500px; border-radius: 20px;
+    position: relative; max-height: 90vh; overflow-y: auto;
+  }
+  .details-wide { max-width: 700px; }
+  .modal-main-img { width: 100%; height: 320px; object-fit: cover; }
+  .close-modal-btn {
+    position: absolute; top: 15px; right: 15px; border: none; background: white;
+    width: 35px; height: 35px; border-radius: 50%; font-size: 24px; font-weight: bold;
+    cursor: pointer; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .accent-separator { width: 40px; height: 4px; background: #27ae60; border-radius: 10px; margin-bottom: 15px; }
+  .modal-description { white-space: pre-line; line-height: 1.6; font-size: 15px; }
+
+  /* Boutons */
+  .btn-create-event { background: #1a5c37; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; }
+  .btn-submit-now { background: #1a5c37; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: 700; }
+
+  @media (max-width: 576px) {
+    .event-card-horizontal { flex-direction: column; }
+    .event-img-side { width: 100%; height: 180px; }
+  }
+</style>
+
+<script>
+  // FONCTION POUR LES DÉTAILS
+  function afficherDetails(btn) {
+    // 1. On récupère les data attributes
+    const titre = btn.getAttribute('data-titre');
+    const desc = btn.getAttribute('data-desc');
+    const date = btn.getAttribute('data-date');
+    const img = btn.getAttribute('data-img');
+
+    // 2. On remplit la modal
+    document.getElementById('mdl-titre').innerText = titre;
+    document.getElementById('mdl-desc').innerText = desc;
+    document.getElementById('mdl-date').innerHTML = '<i class="bi bi-clock"></i> ' + date;
+    
+    const imageTag = document.getElementById('mdl-img');
+    if(img && img !== "") {
+      imageTag.src = img;
+      imageTag.style.display = 'block';
+    } else {
+      imageTag.style.display = 'none';
+    }
+
+    // 3. On affiche
+    document.getElementById('detailsModal').style.display = 'flex';
+  }
+
+  function fermerDetails() {
+    document.getElementById('detailsModal').style.display = 'none';
+  }
+
+  // FONCTIONS POUR LE FORMULAIRE
+  function ouvrirFormulaire() {
+    document.getElementById('pubModal').style.display = 'flex';
+  }
+
+  function fermerFormulaire() {
+    document.getElementById('pubModal').style.display = 'none';
+  }
+
+  // FERMETURE AU CLIC EXTERIEUR
+  window.onclick = function(event) {
+    const dModal = document.getElementById('detailsModal');
+    const pModal = document.getElementById('pubModal');
+    if (event.target == dModal) dModal.style.display = 'none';
+    if (event.target == pModal) pModal.style.display = 'none';
+  }
+</script>

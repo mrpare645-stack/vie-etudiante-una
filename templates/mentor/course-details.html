@@ -1,353 +1,320 @@
+{% extends "mentor/base.html" %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Détails Actualité - UNA Vie Estudiantine</title>
-  <meta name="description" content="Découvrez les détails de l'actualité">
-  <meta name="keywords" content="actualité, détails, UNA, vie estudiantine">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>{{ actualite.titre }} - UNA Vie Estudiantine</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'mentor/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'mentor/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/webp" sizes="32x32" href="{% static 'mentor/assets/img/logo.webp' %}">
-  <link rel="shortcut icon" href="{% static 'mentor/assets/img/logo.webp' %}" type="image/webp">
-  <link href="{% static 'mentor/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+{% block title %}{{ actualite.titre }} - UNA Vie Estudiantine{% endblock %}
 
-  <!-- Vendor CSS Files -->
-  <link href="{% static 'mentor/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'mentor/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-  <link href="{% static 'mentor/assets/vendor/aos/aos.css' %}" rel="stylesheet">
-  <link href="{% static 'mentor/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
-  <link href="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+{% block extra_css %}
+    <style>
+        :root {
+            --una-green-dark: #1a5c37;
+            --una-green-light: #27ae60;
+            --una-soft-gray: #f8f9fa;
+            --una-text: #2c3e50;
+            --una-accent: #ffcc00;
+        }
 
-  <!-- Main CSS File -->
-  <link href="{% static 'mentor/assets/css/main.css' %}" rel="stylesheet">
-  
-  <!-- Navbar Slider Custom CSS -->
-  <link href="{% static 'mentor/assets/css/navbar-slider-custom.css' %}" rel="stylesheet">
+        body { font-family: 'Inter', sans-serif; color: var(--una-text); line-height: 1.7; background-color: #fff; }
+
+        /* --- SECTION 1: HERO BANNER --- */
+        .premium-banner {
+            position: relative; height: 60vh; min-height: 450px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; background: #000;
+        }
+        .banner-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%; /* Plus haut pour le parallaxe */
+            background-size: cover; background-position: center; z-index: 1; opacity: 0.6;
+            transition: transform 0.1s ease-out;
+        }
+        .banner-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(26, 92, 55, 0.7), rgba(0, 0, 0, 0.8)); z-index: 2;
+        }
+        .banner-content { position: relative; z-index: 3; text-align: center; color: white; padding: 0 20px; max-width: 1000px; }
+        .banner-title { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 25px; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .breadcrumb-custom {
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+            display: inline-flex; padding: 10px 25px; border-radius: 50px; font-size: 14px; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .breadcrumb-custom a { color: #fff; text-decoration: none; font-weight: 500; opacity: 0.8; transition: 0.3s; }
+        .breadcrumb-custom a:hover { opacity: 1; color: var(--una-accent); }
+
+        /* --- SECTION 2: ARTICLE CONTENT --- */
+        .article-container { padding: 80px 0; background: #fff; }
+        .main-article-img { 
+            width: 100%; height: auto; max-height: 500px; object-fit: cover;
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); margin-bottom: 50px; 
+        }
+        
+        .article-meta { display: flex; flex-wrap: wrap; gap: 25px; color: #64748b; font-size: 15px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; }
+        .article-meta i { color: var(--una-green-light); font-size: 1.1rem; }
+
+        .article-content h3 { font-weight: 800; color: var(--una-green-dark); margin-bottom: 25px; font-size: 2.4rem; letter-spacing: -1px; }
+        .article-body { font-size: 1.15rem; color: #334155; margin-top: 25px; text-align: justify; }
+        .article-body p { margin-bottom: 1.5rem; }
+
+        /* --- SECTION 3: SIDEBAR --- */
+        .sidebar-widget { background: #fff; border-radius: 20px; padding: 35px; margin-bottom: 30px; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .widget-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 25px; color: var(--una-green-dark); display: flex; align-items: center; gap: 10px; }
+        .widget-title::before { content: ''; width: 4px; height: 20px; background: var(--una-green-light); border-radius: 10px; }
+        
+        .author-box { text-align: center; background: var(--una-soft-gray); }
+        .author-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        
+        .stats-line { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; }
+        .stats-value { color: var(--una-green-dark); font-weight: 700; }
+
+        .btn-all-news { 
+            background: var(--una-green-dark); color: white; border-radius: 12px; padding: 18px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; box-shadow: 0 10px 20px rgba(26, 92, 55, 0.2);
+        }
+        .btn-all-news:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(26, 92, 55, 0.3); color: #fff; filter: brightness(1.1); }
+
+        /* Reactions & Comments */
+        .reaction-btn { border: 2px solid #f1f5f9; background: white; border-radius: 50px; padding: 8px 16px; transition: 0.2s; font-weight: 600; color: #64748b; }
+        .reaction-btn:hover { background: #f8fafc; transform: scale(1.05); }
+        .reaction-btn.active { border-color: var(--una-green-light); background: #ecfdf5; color: var(--una-green-dark); }
+        
+        .comment-card { background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .reply-card { margin-left: 40px; border-left: 3px solid #e2e8f0; background: white; }
+        .comment-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .reply-btn { font-size: 0.85rem; color: var(--una-green-light); cursor: pointer; font-weight: 600; }
+    </style>
 </head>
+{% endblock %}
 
-<body class="course-details-page">
+<body>
 
-  <!-- Navbar Header -->
-  <header class="navbar-header">
-    <div class="container-fluid container-xl">
-      <div class="navbar-content">
-        <!-- Logo -->
-        <a href="{% url 'vie_estudiantine_una:accueil' %}" class="logo-section">
-          <img src="{% static 'mentor/assets/img/logo.webp' %}" alt="UNA Logo">
-          <div class="logo-text">
-            <h1>UNA</h1>
-            <p>Vie Estudiantine</p>
-          </div>
-        </a>
-
-        <!-- Navigation Menu -->
-        <nav class="nav-menu">
-          <ul class="nav-links">
-            <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:courses' %}" class="active">Actualités</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
-            <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
-          </ul>
-        </nav>
-
-        <!-- CTA Button -->
-        <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta">UNA+</a>
-
-        <!-- Mobile Menu Toggle -->
-        <button class="mobile-toggle" id="mobile-toggle">
-          <i class="bi bi-list"></i>
-        </button>
-      </div>
-
-      <!-- Mobile Navigation -->
-      <nav class="mobile-nav" id="mobile-nav">
-        <ul>
-          <li><a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:about' %}">À propos</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:courses' %}">Actualités</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:trainers' %}">Clubs</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:events' %}">Événements</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:pricing' %}">CROUA2</a></li>
-          <li><a href="{% url 'vie_estudiantine_una:contact' %}">Contact</a></li>
-          <li style="border: none; padding: 15px 0;"><a href="{% url 'vie_estudiantine_una:courses' %}" class="btn-cta" style="display: inline-block;">UNA+</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Page Banner -->
-  <section class="page-banner" style="background-image: url('{% static 'mentor/assets/img/hero-bg.jpg' %}'); background-size: cover; background-position: center; height: 350px; position: relative; display: flex; align-items: center; justify-content: center;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 70, 135, 0.5); z-index: 1;"></div>
-    <div style="position: relative; z-index: 2; text-align: center; color: white; padding: 40px 20px;">
-      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 15px; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">Détails Actualité</h1>
-      <p style="font-size: 20px; margin: 0; opacity: 0.95; text-shadow: 0 1px 4px rgba(0,0,0,0.2);">Article complet et détaillé</p>
-    </div>
-    <nav style="position: absolute; bottom: 20px; left: 0; right: 0; z-index: 3;">
-      <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; gap: 10px; color: white; font-size: 14px;">
-          <li><a href="{% url 'vie_estudiantine_una:accueil' %}" style="color: white; text-decoration: none; transition: opacity 0.3s;">Accueil</a></li>
-          <li style="opacity: 0.7;">/</li>
-          <li><a href="{% url 'vie_estudiantine_una:courses' %}" style="color: white; text-decoration: none; transition: opacity 0.3s;">Actualités</a></li>
-          <li style="opacity: 0.7;">/</li>
-          <li>Détails</li>
-        </ol>
-      </div>
-    </nav>
-  </section>
-
-  <main class="main">
-
-    <!-- Course Details Section -->
-    <section id="course-details" class="course-details section">
-
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        {% if actualite %}
-        <div class="row">
-
-          <div class="col-lg-8">
-
-            {% if actualite.image %}
-            <img src="{{ actualite.image.url }}" class="img-fluid mb-5" alt="{{ actualite.titre }}">
-            {% endif %}
-
-            <h3>{{ actualite.titre }}</h3>
-
-            <p class="fst-italic">
-              <strong>Auteur:</strong> {{ actualite.nom_auteur }} | 
-              <strong>Date:</strong> {{ actualite.date_pub|date:"d M Y" }}
-            </p>
-
-            <h4>Résumé</h4>
-
-            <p>
-              {{ actualite.resume }}
-            </p>
-
-            <h4>Contenu Complet</h4>
-
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p style="white-space: pre-wrap;">
-                {{ actualite.description }}
-              </p>
+    <main>
+{% block contenu_principal %}
+    <main id="main">
+        <header class="premium-banner">
+            <div class="banner-bg" style="background-image: url('{% if actualite.image %}{{ actualite.image.url }}{% else %}{% endif %}');"></div>
+            <div class="banner-overlay"></div>
+            <div class="banner-content" data-aos="zoom-out">
+                <h1 class="banner-title">{{ actualite.titre }}</h1>
+                <nav class="breadcrumb-custom">
+                    <a href="{% url 'vie_estudiantine_una:accueil' %}">Accueil</a> 
+                    <span class="mx-3 text-white-50">/</span> 
+                    <a href="{% url 'vie_estudiantine_una:pages' 'actualites' %}">Actualités</a>
+                </nav>
             </div>
+        </header>
 
-            <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #004687;">
-              <p><strong><i class="bi bi-info-circle"></i> Informations supplémentaires:</strong></p>
-              <ul style="margin-bottom: 0;">
-                <li>Catégorie: <strong>{{ actualite.categorie }}</strong></li>
-                <li>Vues: <strong>{{ actualite.vues }}</strong></li>
-                <li>Likes: <strong>{{ actualite.likes }}</strong></li>
-              </ul>
+        <section class="article-container">
+            <div class="container">
+                {% if actualite %}
+                <div class="row g-5">
+                    
+                    <article class="col-lg-8" data-aos="fade-up">
+                        {% if actualite.image %}
+                            <img src="{{ actualite.image.url }}" class="main-article-img" alt="{{ actualite.titre }}">
+                            <img src="{{ actualite.image.url }}" class="main-article-img" alt="{{ actualite.titre }}" loading="lazy">
+                        {% endif %}
+
+                        <div class="article-meta">
+                            <span><i class="bi bi-person-circle me-2"></i>{{ actualite.nom_auteur }}</span>
+                            <span><i class="bi bi-calendar3 me-2"></i>{{ actualite.date_pub|date:"d F Y" }}</span>
+                            <span><i class="bi bi-bookmark-star me-2"></i>{{ actualite.categorie }}</span>
+                        </div>
+
+                        <div class="article-content">
+                            <h3>{{ actualite.titre }}</h3>
+                            
+                            <div class="lead" style="font-size: 1.25rem; color: #475569; font-style: italic; border-left: 5px solid var(--una-green-light); padding: 10px 0 10px 25px; margin: 30px 0; background: #f8fafc;">
+                                {{ actualite.resume }}
+                            </div>
+
+                            <div class="article-body">
+                                {{ actualite.description|linebreaks }}
+                            </div>
+                        </div>
+
+                        <div class="mt-5 p-4 d-flex align-items-start" style="background: #ecfdf5; border-radius: 16px; border-left: 6px solid var(--una-green-light);">
+                            <i class="bi bi-info-circle-fill me-3 fs-4 text-success"></i>
+                            <div>
+                                <h5 class="fw-bold mb-1">Informations Complémentaires</h5>
+                                <p class="small text-muted mb-0">Cet article est publié pour la communauté de l'Université Nangui Abrogoua. Des mises à jour peuvent être effectuées par l'administration du CROU.</p>
+                            </div>
+                        </div>
+
+                        <!-- SECTION RÉACTIONS -->
+                        <div class="mt-5 pt-4 border-top">
+                            <h5 class="fw-bold mb-3">Réagir à cet article</h5>
+                            <div class="d-flex gap-2 flex-wrap" id="reaction-container">
+                                <button onclick="toggleReaction('LIKE')" class="reaction-btn {% if user_reaction.reaction_type == 'LIKE' %}active{% endif %}" id="btn-LIKE">
+                                    👍 <span id="count-LIKE">{{ reaction_counts.LIKE }}</span>
+                                </button>
+                                <button onclick="toggleReaction('LOVE')" class="reaction-btn {% if user_reaction.reaction_type == 'LOVE' %}active{% endif %}" id="btn-LOVE">
+                                    ❤️ <span id="count-LOVE">{{ reaction_counts.LOVE }}</span>
+                                </button>
+                                <button onclick="toggleReaction('FIRE')" class="reaction-btn {% if user_reaction.reaction_type == 'FIRE' %}active{% endif %}" id="btn-FIRE">
+                                    🔥 <span id="count-FIRE">{{ reaction_counts.FIRE }}</span>
+                                </button>
+                                <button onclick="toggleReaction('CLAP')" class="reaction-btn {% if user_reaction.reaction_type == 'CLAP' %}active{% endif %}" id="btn-CLAP">
+                                    👏 <span id="count-CLAP">{{ reaction_counts.CLAP }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SECTION COMMENTAIRES -->
+                        <div class="mt-5">
+                            <h4 class="fw-bold mb-4">Commentaires ({{ comments.count }})</h4>
+                            
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'vie_estudiantine_una:add_comment' 'actualite' actualite.id %}" method="POST" class="mb-5">
+                            <form action="{% url 'vie_estudiantine_una:add_comment' 'actualite' actualite.id %}" method="POST" class="mb-5" data-aos="fade-up">
+                                {% csrf_token %}
+                                <div class="d-flex gap-3">
+                                    <img src="{{ user.profile.photo.url }}" class="comment-avatar">
+                                    <div class="flex-grow-1">
+                                        <textarea name="text" class="form-control" rows="2" placeholder="Partagez votre avis..." required></textarea>
+                                        <button type="submit" class="btn btn-sm btn-success mt-2 rounded-pill px-4">Publier</button>
+                                    </div>
+                                </div>
+                            </form>
+                            {% else %}
+                            <div class="alert alert-light border mb-4">Connectez-vous pour participer à la discussion.</div>
+                            {% endif %}
+
+                            {% for comment in comments %}
+                            <div class="comment-card">
+                            <div class="comment-card" data-aos="fade-up" data-aos-delay="100">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex gap-3">
+                                        <img src="{{ comment.user.profile.photo.url }}" class="comment-avatar">
+                                        <img src="{{ comment.user.profile.photo.url }}" class="comment-avatar" loading="lazy">
+                                        <div>
+                                            <h6 class="fw-bold mb-0">{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>
+                                            <small class="text-muted">{{ comment.date|timesince }}</small>
+                                            <p class="mt-2 mb-1">{{ comment.text }}</p>
+                                            <span class="reply-btn" onclick="document.getElementById('reply-form-{{ comment.id }}').classList.toggle('d-none')">Répondre</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Formulaire de réponse caché -->
+                                <form action="{% url 'vie_estudiantine_una:add_comment' 'actualite' actualite.id %}" method="POST" class="mt-3 d-none ms-5" id="reply-form-{{ comment.id }}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                    <textarea name="text" class="form-control form-control-sm mb-2" placeholder="Votre réponse..." required></textarea>
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Répondre</button>
+                                </form>
+
+                                <!-- Réponses (Threads) -->
+                                {% for reply in comment.replies.all %}
+                                <div class="comment-card reply-card mt-3">
+                                    <div class="d-flex gap-3">
+                                    <div class="d-flex gap-3" data-aos="fade-up" data-aos-delay="50">
+                                        <img src="{{ reply.user.profile.photo.url }}" class="comment-avatar" style="width: 30px; height: 30px;">
+                                        <div>
+                                            <h6 class="fw-bold mb-0 small">{{ reply.user.first_name }} <span class="text-muted fw-normal">répond à {{ comment.user.first_name }}</span></h6>
+                                            <p class="mt-1 mb-0 small">{{ reply.text }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </article>
+
+                    <aside class="col-lg-4">
+                        
+                        {% if actualite.image_auteur %}
+                        <div class="sidebar-widget author-box" data-aos="fade-left">
+                            <h5 class="widget-title">L'auteur</h5>
+                            <img src="{{ actualite.image_auteur.url }}" alt="{{ actualite.nom_auteur }}" class="author-img">
+                            <img src="{{ actualite.image_auteur.url }}" alt="{{ actualite.nom_auteur }}" class="author-img" loading="lazy">
+                            <h6 class="fw-bold mb-1 fs-5">{{ actualite.nom_auteur }}</h6>
+                            <p class="badge bg-white text-success px-3 py-2 border">Rédacteur Officiel</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="sidebar-widget" data-aos="fade-left" data-aos-delay="100">
+                            <h5 class="widget-title">Engagement</h5>
+                            <div class="stats-line">
+                                <span class="text-muted"><i class="bi bi-eye me-2"></i> Lectures</span>
+                                <span class="stats-value">{{ actualite.vues }}</span>
+                            </div>
+                            <div class="stats-line">
+                                <span class="text-muted"><i class="bi bi-
+                            <div class="stats-line">
+                                <span class="text-muted"><i class="bi bi-share me-2"></i> Partages</span>
+                                <span class="stats-value">{{ actualite.likes|add:"12" }}</span>
+                            </div>
+                        </div>
+
+                        <div class="sticky-top" style="top: 20px;">
+                            <a href="{% url 'vie_estudiantine_una:pages' 'actualites' %}" class="btn btn-all-news w-100 fw-bold">
+                                <i class="bi bi-grid-3x3-gap me-2"></i> Découvrir d'autres actus
+                            </a>
+                        </div>
+
+                    </aside>
+                </div>
+                {% endif %}
             </div>
+        </section>
+    </main>
+{% endblock %}
 
-          </div>
-
-          <div class="col-lg-4">
-
-            {% if actualite.image_auteur %}
-            <div class="course-info d-flex align-items-center mb-4" style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
-              <img src="{{ actualite.image_auteur.url }}" alt="{{ actualite.nom_auteur }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
-              <div>
-                <h5 style="margin-bottom: 5px;">Auteur</h5>
-                <p style="margin: 0;">{{ actualite.nom_auteur }}</p>
-              </div>
-            </div>
-            {% endif %}
-
-            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-              <h5 style="margin: 0;">Date de publication</h5>
-              <p style="margin: 0;">{{ actualite.date_pub|date:"d/m/Y" }}</p>
-            </div>
-
-            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-              <h5 style="margin: 0;">Catégorie</h5>
-              <p style="margin: 0;"><span class="badge bg-primary">{{ actualite.categorie }}</span></p>
-            </div>
-
-            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-              <h5 style="margin: 0;">Vues</h5>
-              <p style="margin: 0;"><i class="bi bi-eye"></i> {{ actualite.vues }}</p>
-            </div>
-
-            <div class="course-info d-flex justify-content-between align-items-center mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-              <h5 style="margin: 0;">J'aime</h5>
-              <p style="margin: 0;"><i class="bi bi-heart"></i> {{ actualite.likes }}</p>
-            </div>
-
-            <div style="margin-top: 20px;">
-              <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn btn-primary w-100">
-                <i class="bi bi-arrow-left"></i> Retour aux actualités
-              </a>
-            </div>
-
-          </div>
-
-        </div>
-        {% else %}
-        <div class="row">
-          <div class="col-12 text-center">
-            <h4>Article non trouvé</h4>
-            <p>Désolé, l'actualité que vous recherchez n'existe pas.</p>
-            <a href="{% url 'vie_estudiantine_una:courses' %}" class="btn btn-primary">
-              <i class="bi bi-arrow-left"></i> Retour aux actualités
-            </a>
-          </div>
-        </div>
-        {% endif %}
-
-      </div>
-
-    </section><!-- /Course Details Section -->
-
-  </main>
-
-  <footer id="footer" class="footer position-relative light-background">
-
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Vie Estudiantine UNA</span>
-          </a>
-          <div class="footer-contact pt-3">
-            <p>Université Nangui Abrogoua</p>
-            <p>Abidjan – Côte d'Ivoire</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+225 0501257670</span></p>
-            <p><strong>Email:</strong> <span>vieestudiantine@una.ci</span></p>
-          </div>
-          <div class="social-links d-flex mt-4">
-            <a href="https://www.univ-na.ci/"><i class="bi bi-twitter-x"></i></a>
-            <a href="https://www.univ-na.ci/"><i class="bi bi-facebook"></i></a>
-            <a href="https://www.univ-na.ci/"><i class="bi bi-instagram"></i></a>
-            <a href="https://www.univ-na.ci/"><i class="bi bi-linkedin"></i></a>
-          </div>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Liens utiles</h4>
-          <ul>
-            <li><a href="#">Accueil</a></li>
-            <li><a href="#">À propos</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Conditions d'utilisation</a></li>
-            <li><a href="#">Politique de confidentialité</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Services étudiants</h4>
-          <ul>
-            <li><a href="#">Services universitaires</a></li>
-            <li><a href="https://croua2.ci/">Logement (CROU)</a></li>
-            <li><a href="https://croua2.ci/">Restauration</a></li>
-            <li><a href="https://croua2.ci/">Santé universitaire</a></li>
-            <li><a href="https://www.univ-na.ci/">Insertion professionnelle</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Bulletin d'information etudiant</h4>
-          <p>Recevez les actualités, événements et informations importantes
-          concernant la vie estudiantine à l'UNA!</p>
-
-          <form method="post">
-          {% csrf_token %}
-          <div class="newsletter-form">
-            <input type="email" name="email" placeholder="Votre email">
-            <input type="submit" value="S'inscrire">
-          </div>
-        </form>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>2025</span> <strong class="px-1 sitename">Université Nangui Abrogoua</strong> <span>— Vie Estudiantine</span></p>
-     
-    </div>
-
-  </footer>
-
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="{% static 'mentor/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'mentor/assets/vendor/php-email-form/validate.js' %}"></script>
-  <script src="{% static 'mentor/assets/vendor/aos/aos.js' %}"></script>
-  <script src="{% static 'mentor/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
-  <script src="{% static 'mentor/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
-
-  <!-- Main JS File -->
-  <script src="{% static 'mentor/assets/js/main.js' %}"></script>
-
-  <!-- Mobile Menu Toggle Script -->
-  <script>
-    const mobileToggle = document.getElementById('mobile-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
-
-    if (mobileToggle && mobileNav) {
-      mobileToggle.addEventListener('click', () => {
-        mobileNav.classList.toggle('active');
-      });
-
-      const mobileNavLinks = mobileNav.querySelectorAll('a');
-      mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          mobileNav.classList.remove('active');
+    <script src="{% static 'mentor/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{% block extra_js %}
+    <script src="{% static 'mentor/assets/vendor/aos/aos.js' %}"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Parallaxe Smooth
+        window.addEventListener('scroll', function() {
+            const bg = document.querySelector('.banner-bg');
+            if(bg) {
+                let offset = window.pageYOffset;
+                bg.style.transform = `translateY(${offset * 0.4}px)`;
+            }
         });
-      });
-    }
-  </script>
 
-  <!-- Responsive Banner CSS -->
-  <style>
-    @media (max-width: 1200px) {
-      .page-banner h1 {
-        font-size: 42px !important;
-      }
-      .page-banner p {
-        font-size: 18px !important;
-      }
-    }
+        // AJAX Reaction Logic
+        function toggleReaction(type) {
+            {% if not user.is_authenticated %}
+                window.location.href = "{% url 'vie_estudiantine_una:login' %}?next={{ request.path }}";
+                return;
+            {% endif %}
 
-    @media (max-width: 768px) {
-      .page-banner {
-        height: 280px !important;
-      }
-      .page-banner h1 {
-        font-size: 28px !important;
-      }
-      .page-banner p {
-        font-size: 16px !important;
-      }
-    }
+            fetch(`{% url 'vie_estudiantine_una:toggle_reaction' 'actualite' actualite.id 'TYPE' %}`.replace('TYPE', type))
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 'ok') {
+                    // Update counts
+                    document.getElementById('count-LIKE').innerText = data.counts.LIKE;
+                    document.getElementById('count-LOVE').innerText = data.counts.LOVE;
+                    document.getElementById('count-FIRE').innerText = data.counts.FIRE;
+                    document.getElementById('count-CLAP').innerText = data.counts.CLAP;
 
-    @media (max-width: 480px) {
-      .page-banner {
-        height: 220px !important;
-      }
-      .page-banner h1 {
-        font-size: 22px !important;
-      }
-      .page-banner p {
-        font-size: 14px !important;
-      }
-    }
-  </style>
-
+                    // Update active state
+                    document.querySelectorAll('.reaction-btn').forEach(btn => btn.classList.remove('active'));
+                    if(data.action !== 'removed') {
+                        document.getElementById('btn-' + type).classList.add('active');
+                    }
+                }
+            });
+        }
+    </script>
 </body>
-
 </html>
+{% endblock %}

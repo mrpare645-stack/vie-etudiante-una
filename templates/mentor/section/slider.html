@@ -1,0 +1,220 @@
+{% load static %}
+
+
+<section class="premium-hero">
+    <div class="main-slider">
+        {% for slide in slides %}
+        <div class="slide-item {% if forloop.first %}active{% endif %}">
+            <div class="slide-visual">
+                <div class="slide-img" style="background-image: url('{{ slide.image.url }}');"></div>
+                <div class="slide-overlay"></div>
+            </div>
+            
+            <div class="slide-container container">
+                <div class="slide-body">
+                    {% if slide.titre %}
+                        <h2 class="slide-anim title">{{ slide.titre }}</h2>
+                    {% endif %}
+                    
+                    {% if slide.sous_titre %}
+                        <p class="slide-anim subtitle">{{ slide.sous_titre }}</p>
+                    {% endif %}
+                    
+                    {% if slide.bouton_lien and slide.bouton_texte %}
+                        <div class="slide-anim action">
+                            <a href="{{ slide.bouton_lien }}" class="btn-impact">
+                                <span>{{ slide.bouton_texte }}</span>
+                                <i class="bi bi-arrow-right-circle-fill"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="slider-controls">
+        <button class="ctrl-btn prev"><i class="bi bi-chevron-left"></i></button>
+        <div class="slider-pagination">
+            {% for slide in slides %}
+                <span class="pag-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        </div>
+        <button class="ctrl-btn next"><i class="bi bi-chevron-right"></i></button>
+    </div>
+</section>
+
+<style>
+/* Conteneur principal */
+.premium-hero {
+    position: relative;
+    height: 85vh; /* Hauteur idéale pour le web moderne */
+    width: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+/* Gestion des Slides */
+.slide-item {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.slide-item.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+/* Effet Ken Burns (Zoom lent sur l'image) */
+.slide-visual { width: 100%; height: 100%; position: relative; overflow: hidden; }
+.slide-img {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 10s linear;
+}
+.slide-item.active .slide-img { transform: scale(1.15); }
+
+/* Overlay dégradé (L'impact visuel) */
+.slide-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(75deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+}
+
+/* Alignement du texte */
+.slide-container {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    transform: translateY(-50%);
+    z-index: 20;
+    color: white;
+}
+.slide-body { max-width: 850px; padding-left: 50px; }
+
+/* Animations de texte séquentielles */
+.slide-anim {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-item.active .title { 
+    opacity: 1; transform: translateY(0); transition-delay: 0.4s;
+    font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 20px;
+}
+.slide-item.active .subtitle { 
+    opacity: 1; transform: translateY(0); transition-delay: 0.6s;
+    font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-bottom: 35px; max-width: 600px;
+}
+.slide-item.active .action { 
+    opacity: 1; transform: translateY(0); transition-delay: 0.8s;
+}
+
+/* Bouton Impact */
+.btn-impact {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #004687;
+    color: #fff !important;
+    padding: 18px 40px;
+    border-radius: 4px;
+    text-decoration: none !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    box-shadow: 0 10px 30px rgba(0, 70, 135, 0.3);
+}
+.btn-impact:hover { background: #0066cc; transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 70, 135, 0.4); }
+
+/* Navigation */
+.slider-controls {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    z-index: 100;
+}
+.ctrl-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.3);
+    color: white; width: 55px; height: 55px; border-radius: 50%;
+    cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+}
+.ctrl-btn:hover { background: white; color: #004687; border-color: white; }
+
+.pag-dot {
+    width: 50px; height: 3px; background: rgba(255,255,255,0.3);
+    cursor: pointer; transition: 0.4s; border-radius: 2px;
+}
+.pag-dot.active { background: #004687; width: 80px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .slide-body { padding-left: 20px; text-align: center; margin: 0 auto; }
+    .slide-overlay { background: rgba(0,0,0,0.6); }
+    .slider-controls { bottom: 20px; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.slide-item');
+    const dots = document.querySelectorAll('.pag-dot');
+    const nextBtn = document.querySelector('.ctrl-btn.next');
+    const prevBtn = document.querySelector('.ctrl-btn.prev');
+    
+    let currentIdx = 0;
+    let isTransitioning = false;
+    let autoPlayTimer;
+
+    function changeSlide(nextIdx) {
+        if (isTransitioning || nextIdx === currentIdx) return;
+        isTransitioning = true;
+
+        // Retirer la classe active
+        slides[currentIdx].classList.remove('active');
+        dots[currentIdx].classList.remove('active');
+
+        // Mettre à jour l'index
+        currentIdx = (nextIdx + slides.length) % slides.length;
+
+        // Ajouter la classe active
+        slides[currentIdx].classList.add('active');
+        dots[currentIdx].classList.add('active');
+
+        // Temps de transition correspondant au CSS
+        setTimeout(() => { isTransitioning = false; }, 1200);
+        
+        startAutoPlay();
+    }
+
+    function startAutoPlay() {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = setInterval(() => {
+            changeSlide(currentIdx + 1);
+        }, 7000); // Change toutes les 7 secondes
+    }
+
+    nextBtn.addEventListener('click', () => changeSlide(currentIdx + 1));
+    prevBtn.addEventListener('click', () => changeSlide(currentIdx - 1));
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => changeSlide(i));
+    });
+
+    // Lancement auto
+    startAutoPlay();
+});
+</script>

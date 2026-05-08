@@ -1,0 +1,315 @@
+<section id="news-social" class="news-social-section py-5">
+    <div class="container section-title" data-aos="fade-up">
+        <div class="elite-badge">Flux d'actualités</div>
+        <h2>Le Journal de <span class="text-una">l'UNA</span></h2>
+        <p>Interagissez avec les dernières nouvelles de votre campus.</p>
+    </div>
+
+    <div class="container">
+        <div class="row g-4">
+            {% for actualite in actualites %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                <article class="social-news-card">
+                    
+                    <div class="card-image-wrapper">
+                        <img src="{{ actualite.image.url }}" class="news-img" alt="{{ actualite.titre }}">
+                        <div class="category-tag">{{ actualite.categorie }}</div>
+                        <div class="image-hover-overlay">
+                            <a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}" class="btn-read-hover">
+                                Lire l'article
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="card-date">
+                            <i class="bi bi-clock"></i> {{ actualite.date_pub|date:"d M Y" }}
+                        </div>
+                        
+                        <h3 class="card-title">
+                            <a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}">
+                                {{ actualite.titre }}
+                            </a>
+                        </h3>
+                        
+                        <p class="card-text">{{ actualite.resume|truncatechars:100 }}</p>
+
+                        <div class="card-social-footer">
+                            <div class="post-author">
+                                <img src="{{ actualite.image_auteur.url }}" alt="Auteur">
+                                <span>{{ actualite.nom_auteur }}</span>
+                            </div>
+                            
+                            <div class="post-stats">
+                                <div class="stat-item views" title="Vues">
+                                    <i class="bi bi-eye"></i>
+                                    <span>{{ actualite.vues }}</span>
+                                </div>
+                                
+                                <button class="stat-item like-btn" data-news-id="{{ actualite.id }}" title="J'aime">
+                                    <i class="bi bi-heart"></i>
+                                    <span class="like-count">{{ actualite.likes }}</span>
+                                </button>
+
+                                <a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}#comments" class="stat-item comment-link" title="Commenter">
+                                    <i class="bi bi-chat-dots"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+           <a href="{% url 'vie_estudiantine_una:pages' 'courses' %}" class="btn-una-primary">
+                Voir toutes les actualités
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .news-social-section {
+        background: #fdfdfd;
+        padding: 100px 0;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .elite-badge {
+        display: inline-block;
+        background: rgba(39, 174, 96, 0.1);
+        color: #1a5c37;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .text-una { color: #27ae60; }
+
+    /* --- CARTE DESIGN --- */
+    .social-news-card {
+        background: white;
+        border-radius: 25px;
+        border: 1px solid #f0f0f0;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .social-news-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+        border-color: #27ae60;
+    }
+
+    /* Image & Overlay */
+    .card-image-wrapper {
+        position: relative;
+        height: 230px;
+        overflow: hidden;
+    }
+
+    .news-img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .social-news-card:hover .news-img {
+        transform: scale(1.15);
+    }
+
+    .category-tag {
+        position: absolute;
+        top: 20px; left: 20px;
+        background: #27ae60;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    .image-hover-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(26, 92, 55, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.4s;
+        backdrop-filter: blur(4px);
+    }
+
+    .social-news-card:hover .image-hover-overlay { opacity: 1; }
+
+    .btn-read-hover {
+        background: white;
+        color: #1a5c37;
+        padding: 10px 25px;
+        border-radius: 50px;
+        text-decoration: none !important;
+        font-weight: 700;
+        transform: translateY(20px);
+        transition: 0.4s;
+    }
+
+    .social-news-card:hover .btn-read-hover { transform: translateY(0); }
+
+    /* Contenu texte */
+    .card-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-date {
+        font-size: 13px;
+        color: #a0aec0;
+        margin-bottom: 12px;
+    }
+
+    .card-title {
+        font-size: 19px;
+        font-weight: 800;
+        line-height: 1.4;
+        margin-bottom: 15px;
+    }
+
+    .card-title a {
+        color: #2d3748;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .card-title a:hover { color: #27ae60; }
+
+    .card-text {
+        color: #718096;
+        font-size: 14.5px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+
+    /* Pied de carte Social */
+    .card-social-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .post-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .post-author img {
+        width: 35px; height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .post-author span {
+        font-size: 13px;
+        font-weight: 700;
+        color: #4a5568;
+    }
+
+    .post-stats {
+        display: flex;
+        gap: 15px;
+    }
+
+    .stat-item {
+        background: none;
+        border: none;
+        color: #a0aec0;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.3s;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .like-btn:hover, .like-btn.active {
+        color: #e53e3e;
+    }
+
+    .like-btn.active i::before {
+        content: "\f415"; /* Coeur plein Bootstrap */
+    }
+
+    /* Animation du bouton Voir Plus */
+    .btn-explore-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        background: #1a5c37;
+        color: white !important;
+        padding: 15px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: 0.4s;
+    }
+
+    .btn-explore-more:hover {
+        background: #27ae60;
+        padding-right: 45px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeButtons = document.querySelectorAll('.like-btn');
+
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Animation de clic (Pop)
+                this.classList.add('animating');
+                
+                // Toggle l'état visuel
+                const isActive = this.classList.toggle('active');
+                const countSpan = this.querySelector('.like-count');
+                let currentLikes = parseInt(countSpan.textContent);
+
+                // Simulation de mise à jour réelle
+                if (isActive) {
+                    countSpan.textContent = currentLikes + 1;
+                    this.style.transform = 'scale(1.3)';
+                } else {
+                    countSpan.textContent = currentLikes - 1;
+                    this.style.transform = 'scale(1)';
+                }
+
+                // Retour à la normale après animation
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+
+                // ICI : Tu peux ajouter ton appel AJAX pour Django
+                // fetch('/like-article/' + this.dataset.newsId + '/')
+            });
+        });
+    });
+</script>

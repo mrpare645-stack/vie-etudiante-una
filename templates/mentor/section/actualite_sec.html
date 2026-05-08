@@ -1,0 +1,240 @@
+{% load static %}
+
+<section id="news-grid" class="news-grid-section py-5">
+  <div class="container">
+    
+    <div class="row mb-5" data-aos="fade-up">
+      <div class="col-md-8">
+        <h2 class="display-5 fw-bold text-dark">Toute l'actualité <span class="text-una">UNA</span></h2>
+        <p class="text-muted">Restez informé sur les temps forts de l'Université Nangui Abrogoua.</p>
+      </div>
+    </div>
+
+    <div class="row gy-4">
+      {% for actualite in actualites %}
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{% cycle '100' '200' '300' %}">
+        <div class="news-post-card">
+          
+          <div class="news-post-img">
+            <img src="{{ actualite.image.url }}" class="img-fluid" alt="{{ actualite.titre }}">
+            <div class="news-post-overlay">
+              <a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}" class="btn-read-more">Lire l'article</a>
+            </div>
+          </div>
+
+          <div class="news-post-content">
+            <div class="news-post-meta d-flex justify-content-between mb-3">
+              <span class="news-category">Actualité</span>
+              <span class="news-views"><i class="bi bi-eye"></i> {{ actualite.vues }}</span>
+            </div>
+
+            <h3 class="news-post-title">
+              <a href="{% url 'vie_estudiantine_una:course_details' actualite.id %}">{{ actualite.titre }}</a>
+            </h3>
+            
+            <p class="news-post-excerpt">
+              {{ actualite.resume|truncatewords:15 }}
+            </p>
+
+            <div class="news-post-author d-flex align-items-center mt-auto">
+              <div class="author-img-wrapper">
+                {% if actualite.image_auteur %}
+                <img src="{{ actualite.image_auteur.url }}" alt="{{ actualite.nom_auteur }}">
+                {% else %}
+                <img src="{% static 'mentor/assets/img/trainers/trainer-1.jpg' %}" alt="Default">
+                {% endif %}
+              </div>
+              <div class="author-details">
+                <span class="author-name">{{ actualite.nom_auteur }}</span>
+                <span class="post-date">{{ actualite.date_pub|date:"d M Y" }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div class="empty-news-state">
+          <i class="bi bi-newspaper display-1 text-light"></i>
+          <p class="mt-3 fs-5 text-muted">Aucune actualité disponible pour le moment.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .news-grid-section {
+    background: #fcfcfc;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .text-una { color: #27ae60; }
+
+  /* --- CARTE ACTUALITÉ --- */
+  .news-post-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #f0f0f0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .news-post-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+    border-color: #27ae60;
+  }
+
+  /* Image & Overlay */
+  .news-post-img {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  .news-post-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .news-post-card:hover .news-post-img img {
+    transform: scale(1.1);
+  }
+
+  .news-post-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 92, 55, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.4s;
+    backdrop-filter: blur(3px);
+  }
+
+  .news-post-card:hover .news-post-overlay {
+    opacity: 1;
+  }
+
+  .btn-read-more {
+    color: white;
+    text-decoration: none;
+    border: 2px solid white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    transition: 0.3s;
+  }
+
+  .btn-read-more:hover {
+    background: white;
+    color: #1a5c37;
+  }
+
+  /* Corps du texte */
+  .news-post-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .news-category {
+    background: #f1f8f4;
+    color: #27ae60;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .news-views {
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .news-post-title {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 15px;
+  }
+
+  .news-post-title a {
+    color: #1e293b;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .news-post-title a:hover {
+    color: #27ae60;
+  }
+
+  .news-post-excerpt {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  /* Auteur Section */
+  .news-post-author {
+    padding-top: 15px;
+    border-top: 1px solid #f1f5f9;
+    gap: 12px;
+  }
+
+  .author-img-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .author-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .author-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .post-date {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  .empty-news-state {
+    padding: 60px;
+    border: 2px dashed #e2e8f0;
+    border-radius: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .news-post-title { font-size: 18px; }
+  }
+</style>

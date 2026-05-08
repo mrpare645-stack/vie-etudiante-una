@@ -1,0 +1,214 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+
+{% block contenu_principal %}
+<style>
+    :root {
+        --una-primary: #1a5c37;
+        --una-accent: #27ae60;
+        --soft-bg: #f0f2f5;
+    }
+    body { background-color: var(--soft-bg); }
+
+    /* Cards Style */
+    .feed-card {
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 16px;
+        transition: transform 0.2s ease;
+        overflow: hidden;
+    }
+    
+    /* Post Input Animation */
+    .post-input {
+        border: none;
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 15px;
+        resize: none;
+        transition: 0.3s;
+    }
+    .post-input:focus {
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(26, 92, 55, 0.1);
+        outline: none;
+    }
+
+    /* Interactions */
+    .btn-interaction {
+        color: #65676b;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    .btn-interaction:hover { background: rgba(0,0,0,0.05); color: var(--una-primary); }
+    .like-active { color: #dc3545 !important; }
+
+    /* Sidebar Sticky */
+    .sticky-sidebar { top: 100px; z-index: 10; }
+
+    .avatar-hover { transition: 0.3s; }
+    .avatar-hover:hover { opacity: 0.8; transform: scale(1.05); }
+</style>
+
+<div class="container py-5 mt-5">
+    <div class="row g-4">
+        
+        <div class="col-lg-8">
+            
+            <div class="card feed-card shadow-sm mb-4 border-0">
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="d-flex gap-3">
+                            <img src="{{ user.profile.photo.url }}" class="rounded-circle shadow-sm" width="50" height="50" style="object-fit: cover;">
+                            <div class="w-100">
+                                {{ form.content }} <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <button type="button" class="btn btn-light rounded-pill text-success fw-bold" onclick="document.getElementById('id_image').click()">
+                                        <i class="bi bi-image-fill me-2"></i>Média
+                                    </button>
+                                    <div class="d-none">{{ form.image }}</div>
+                                    <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold shadow-sm">
+                                        Publier <i class="bi bi-send-fill ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% for post in posts %}
+            <div class="card feed-card shadow-sm mb-4 border-0" data-aos="fade-up">
+                <div class="card-header bg-white border-0 pt-3 px-4 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'vie_estudiantine_una:profile_public' post.author.username %}">
+                            <img src="{{ post.author.profile.photo.url }}" class="rounded-circle border avatar-hover" width="48" height="48" style="object-fit: cover;">
+                        </a>
+                        <div>
+                            <h6 class="mb-0 fw-bold">
+                                <a href="{% url 'vie_estudiantine_una:profile_public' post.author.username %}" class="text-dark text-decoration-none">
+                                    {{ post.author.get_full_name|default:post.author.username }}
+                                </a>
+                            </h6>
+                            <span class="text-muted small"><i class="bi bi-globe-africa me-1"></i>{{ post.created_at|timesince }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center gap-2">
+                        {% if request.user != post.author and post.author.id not in followed_users_ids %}
+                            <a href="{% url 'vie_estudiantine_una:toggle_follow_user' post.author.username %}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold">
+                                + Suivre
+                            </a>
+                        {% endif %}
+
+                        {% if request.user == post.author %}
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                                <li><a class="dropdown-item text-danger fw-bold" href="{% url 'vie_estudiantine_una:delete_post' post.id %}"><i class="bi bi-trash3 me-2"></i>Supprimer</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-body px-4">
+                    {% if post.status == 'REJECTED' %}
+                        <div class="alert alert-light border-start border-danger border-4 py-2 small shadow-sm">
+                            <i class="bi bi-shield-lock-fill text-danger me-2"></i>Contenu modéré.
+                        </div>
+                    {% else %}
+                        <p class="card-text fs-5" style="white-space: pre-wrap;">{{ post.content }}</p>
+                    {% endif %}
+
+                    {% if post.image and post.status != 'REJECTED' %}
+                    <div class="post-media-container rounded-4 overflow-hidden mb-3 border">
+                        <img src="{{ post.image.url }}" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;" loading="lazy">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2 border-top pt-2">
+                        <a href="{% url 'vie_estudiantine_una:toggle_like_post' post.id %}" class="btn-interaction text-decoration-none d-flex align-items-center gap-2 {% if request.user in post.post_likes.all %}like-active{% endif %}">
+                            <i class="bi bi-heart{% if request.user in post.post_likes.all %}-fill{% endif %} fs-5"></i> 
+                            <span>{{ post.likes_count }} J'aime</span>
+                        </a>
+                        <div class="btn-interaction d-flex align-items-center gap-2" data-bs-toggle="collapse" data-bs-target="#collapseComment{{ post.id }}">
+                            <i class="bi bi-chat-left-text fs-5"></i> 
+                            <span>{{ post.comments_count }} Commentaires</span>
+                        </div>
+                    </div>
+
+                    <div class="collapse mt-3" id="collapseComment{{ post.id }}">
+                        <div class="bg-light rounded-4 p-3">
+                            {% for comment in post.post_comments.all %}
+                                {% if comment.status == 'APPROVED' or comment.user == request.user %}
+                                <div class="d-flex gap-2 mb-3">
+                                    <img src="{{ comment.user.profile.photo.url }}" class="rounded-circle" width="32" height="32" style="object-fit: cover;">
+                                    <div class="bg-white p-2 rounded-3 shadow-sm px-3 flex-grow-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-bold small">{{ comment.user.first_name }}</span>
+                                            <span class="text-muted" style="font-size: 0.7rem;">{{ comment.created_at|timesince }}</span>
+                                        </div>
+                                        <p class="small mb-0">{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <form action="{% url 'vie_estudiantine_una:add_post_comment' post.id %}" method="POST" class="mt-3 d-flex gap-2">
+                                {% csrf_token %}
+                                <img src="{{ user.profile.photo.url }}" class="rounded-circle" width="32" height="32" style="object-fit: cover;">
+                                <div class="input-group">
+                                    <input type="text" name="content" class="form-control border-0 bg-white rounded-pill px-3 shadow-sm" placeholder="Écrire un commentaire..." required>
+                                    <button type="submit" class="btn btn-link text-success"><i class="bi bi-send-fill fs-5"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card feed-card border-0 shadow-sm p-5 text-center bg-white">
+                <div class="mb-3"><i class="bi bi-pencil-square display-1 text-light"></i></div>
+                <h4 class="fw-bold">Le fil est vide...</h4>
+                <p class="text-muted">Partagez votre première pensée avec la communauté de l'UNA !</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-4 d-none d-lg-block">
+            <div class="card feed-card border-0 shadow-sm text-center p-4 sticky-sidebar bg-white shadow">
+                <div class="position-relative mb-4">
+                    <div class="bg-success rounded-4" style="height: 80px; opacity: 0.1;"></div>
+                    <img src="{{ user.profile.photo.url }}" class="rounded-circle border border-4 border-white shadow-sm position-absolute top-100 start-50 translate-middle" width="90" height="90" style="object-fit: cover;">
+                </div>
+                <div class="mt-5">
+                    <h5 class="fw-bold mb-0 text-dark">{{ user.get_full_name }}</h5>
+                    <p class="text-muted small mb-3">@{{ user.username }}</p>
+                    <span class="badge bg-light text-success px-3 py-2 rounded-pill mb-3 border">
+                        <i class="bi bi-mortarboard-fill me-1"></i> {{ user.profile.filiere.nom|default:"Étudiant UNA" }}
+                    </span>
+                    
+                    <div class="row g-2 border-top border-bottom py-3 mb-3">
+                        <div class="col-6 border-end">
+                            <span class="fw-bold d-block fs-5 text-dark">{{ user.following.count }}</span>
+                            <small class="text-muted text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Abonnements</small>
+                        </div>
+                        <div class="col-6">
+                            <span class="fw-bold d-block fs-5 text-dark">{{ user.followers.count }}</span>
+                            <small class="text-muted text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">Abonnés</small>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'vie_estudiantine_una:profile_public' user.username %}" class="btn btn-outline-success btn-sm w-100 rounded-pill py-2 fw-bold">
+                        Mon Profil Complet
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

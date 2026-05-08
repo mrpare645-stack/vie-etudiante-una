@@ -1,0 +1,124 @@
+<section id="highlights" class="highlights-section py-5">
+  <div class="container">
+    <div class="row gy-5">
+
+      <div class="col-lg-6">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+          <div>
+            <h3 class="h4 fw-bold mb-1 text-dark">Clubs en <span class="text-success">tendance</span></h3>
+            <p class="small text-muted mb-0">L'engagement associatif à l'UNA.</p>
+          </div>
+          <a href="{% url 'vie_estudiantine_una:pages' 'club' %}" class="una-btn-minimal">
+            Tout voir <i class="bi bi-arrow-right-short"></i>
+          </a>
+        </div>
+
+        <div class="una-list-container">
+          {% for club in top_clubs %}
+          <div class="una-club-card">
+            <div class="una-club-img">
+              <img src="{{ club.logo.url }}" alt="{{ club.nom_club }}">
+            </div>
+            <div class="una-club-info">
+              <h4 class="h6 fw-bold mb-1">{{ club.nom_club }}</h4>
+              <p class="small text-muted mb-0">{{ club.description|truncatechars:80 }}</p>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted small">Aucun club disponible.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+          <div>
+            <h3 class="h4 fw-bold mb-1 text-dark">Événements <span class="text-success">récents</span></h3>
+            <p class="small text-muted mb-0">Prochains rendez-vous phares.</p>
+          </div>
+          <a href="{% url 'vie_estudiantine_una:pages' 'events' %}" class="una-btn-minimal">
+            Calendrier <i class="bi bi-calendar-event"></i>
+          </a>
+        </div>
+
+        <div class="una-list-container">
+          {% for event in recent_events %}
+          <div class="una-event-item">
+            <div class="una-event-date">
+              <span class="d-block fw-bold">{{ event.date_pub|date:"d" }}</span>
+              <span class="small text-uppercase">{{ event.date_pub|date:"M" }}</span>
+            </div>
+            <div class="una-event-body">
+              <h4 class="h6 fw-bold mb-1">{{ event.titre }}</h4>
+              <p class="small text-muted mb-0">{{ event.description|truncatechars:90 }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* --- RESET DES ANCIENS BOUTONS --- */
+  .btn-una-primary, .btn-una-outline { display: none !important; }
+
+  /* --- NOUVEAU STYLE MINIMALISTE --- */
+  .una-btn-minimal {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #27ae60 !important;
+    text-decoration: none !important;
+    padding: 6px 14px;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+    border-radius: 6px;
+    transition: all 0.2s;
+    background: white;
+  }
+
+  .una-btn-minimal:hover {
+    background: #27ae60;
+    color: white !important;
+    border-color: #27ae60;
+  }
+
+  .una-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Cards Clubs */
+  .una-club-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+  .una-club-card:hover { background: #f1f5f9; transform: translateX(5px); }
+  .una-club-img { width: 50px; height: 50px; border-radius: 8px; overflow: hidden; margin-right: 15px; flex-shrink: 0; }
+  .una-club-img img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Items Événements */
+  .una-event-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .una-event-date {
+    width: 50px;
+    text-align: center;
+    background: #eef2ff;
+    color: #1a5c37;
+    padding: 5px;
+    border-radius: 8px;
+    margin-right: 15px;
+    line-height: 1.2;
+  }
+  .una-event-body h4 { color: #2d3748; }
+</style>

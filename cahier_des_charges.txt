@@ -1,0 +1,125 @@
+
+                  CAHIER DES CHARGES - VIE ESTUDIANTINE UNA 
+
+
+1. PRÉSENTATION DU PROJET
+
+Le projet "Vie Estudiantine UNA" est une plateforme web dynamique destinée à 
+centraliser et promouvoir les activités, services et actualités de l'Université 
+Nangui Abrogoua (UNA). Elle offre une interface moderne ("Elite Design") pour 
+connecter l'administration, les étudiants et les partenaires.
+
+2. OBJECTIFS
+
+- Digitaliser la communication de la vie scolaire et universitaire.
+- Faciliter l'accès aux informations pratiques (CROU, Clubs, Événements).
+- Offrir un espace d'expression et de contribution participative (Témoignages, 
+  Propositions de clubs/services via Modales).
+- Fournir une interface d'administration sécurisée et ergonomique pour la gestion 
+  des contenus.
+
+3. FONCTIONNALITÉS FRONT-OFFICE (INTERFACE PUBLIQUE)
+
+3.1. Page d'Accueil
+    - **Slider Premium** : Carrousel plein écran avec effet Ken Burns, transitions fluides et auto-play.
+    - **Services Rapides** : Accès direct aux aides (Handicap, Bourses, Emploi).
+    - **À Propos & Chiffres Clés** : Présentation institutionnelle couplée à des statistiques animées (Compteurs dynamiques : Étudiants, Clubs, Events).
+    - **Pourquoi Nous Choisir** : Section marketing avec cartes holographiques.
+    - **Formations (Features)** : Grille des filières avec effets de survol.
+    - **FAQ** : Accordéon interactif pour les questions fréquentes.
+    - **Actualités** : Grille d'articles avec effets de zoom, méta-données (vues, likes) et auteur.
+    - **Vie Associative (Clubs)** : Liste des clubs en vedette avec bouton d'action rapide.
+    - **Événements** : Calendrier horizontal avec modale de détails (Pop-up).
+    - **Témoignages** : Slider (SwiperJS) des avis étudiants.
+    - **Acteurs Clés** : Trombinoscope de la gouvernance avec liens sociaux.
+    - **Partenaires** : Grille de logos en niveaux de gris (effet hover couleur).
+
+3.2. Pages de Contenu Dynamique
+    - **Actualités** : Liste paginée, page de détail immersive avec bannière parallaxe.
+    - **Clubs & Associations** : Annuaire filtrable, cartes "Premium" avec logos.
+    - **Événements** : Liste chronologique avec modale de visualisation rapide.
+    - **Services CROU** : Distinction visuelle entre services "Officiels" et "Étudiants".
+    - **Contact** : Formulaire moderne avec validation visuelle et carte Google Maps intégrée.
+
+3.3. Interactivité Utilisateur
+    - **Modales de Contribution** : Les formulaires (Proposer un Club, un Service, un Témoignage) s'ouvrent dans des fenêtres pop-up (Modales) sans quitter la page.
+    - **Système de Likes** : Simulation d'interaction sur les actualités.
+    - **Navigation** : Menu "Sticky" (fixe au défilement) et Menu Burger mobile optimisé.
+
+4. FONCTIONNALITÉS BACK-OFFICE (ADMINISTRATION)
+
+4.1. Sécurité Avancée
+    - Authentification à Double Facteur (2FA) obligatoire pour l'accès au Dashboard.
+    - **Envoi OTP Email** : Code à 6 chiffres envoyé via SMTP Gmail sécurisé.
+    - **Gestion des Erreurs** : Messages d'erreur clairs en cas de problème SMTP (sans exposer le code).
+    - **Fonction "Renvoyer le code"** : Bouton pour régénérer un OTP si non reçu.
+    - **Masquage Email** : Affichage partiel de l'email (ex: mrp****@gmail.com) pour confidentialité.
+
+4.2. Dashboard Administrateur Personnalisé (/management/dashboard/)
+    - **KPIs en temps réel** : Total vues, articles, clubs, services, témoins.
+    - **Raccourcis Admin** : Liens directs vers les tables Django avec compteurs d'objets.
+    - Interface de Modération (Validation) :
+        - Clubs en attente (Bouton Valider).
+        - Témoignages en attente (Boutons Approuver / Refuser).
+        - Événements en attente.
+        - Services Étudiants en attente.
+
+4.3. Administration Django Classique
+    - **Gestion CRUD** complète.
+    - **Configuration Statistiques** : Modèle unique pour gérer les chiffres clés (Nb Étudiants, Enseignants) affichés en front.
+    - **Prévisualisation Images** : Thumbnails dans les listes d'objets.
+    - **Bouton Retour** : Lien rapide vers le Dashboard personnalisé.
+
+5. ARCHITECTURE TECHNIQUE
+--------------------------------------------------------------------------------
+5.1. Backend
+    - Langage : Python 3.13
+    - Framework : Django 6.0
+    - Base de données : SQLite (Dev).
+    - Email : SMTP Gmail (TLS/587) avec mots de passe d'application.
+
+5.2. Frontend
+    - Technologies : HTML5, CSS3, JavaScript.
+    - Framework UI : Bootstrap 5.
+    - Bibliothèques JS : 
+        - **AOS** (Animate On Scroll) pour les animations d'apparition.
+        - **SwiperJS** pour les carrousels tactiles.
+        - **PureCounter** pour l'animation des chiffres clés.
+        - **GLightbox** pour les galeries d'images.
+
+5.3. Modèles de Données Principaux
+    - Actualite (Titre, Catégorie, Vues, Image...).
+    - Club_association (Nom, Domaine, Statut validation...).
+    - Evenement (Date, Description, Statut validation...).
+    - ServiceCROU (Type, Localisation, Contact...).
+    - Temoin (Nom, Promotion, Message, Photo...).
+    - Banner & Slide (Gestion de l'affichage visuel).
+    - **Statistique** (Configuration des chiffres clés du site).
+
+6. SÉCURITÉ ET PERFORMANCES
+--------------------------------------------------------------------------------
+- Gestion des droits : Décorateurs `@user_passes_test(is_admin)` sur les vues sensibles.
+- Protection CSRF sur tous les formulaires.
+- Session : Nettoyage des codes OTP après utilisation.
+- Feedback : Messages "Toast" (Django Messages) pour confirmer les actions utilisateur.
+
+7. CHARTE GRAPHIQUE & ERGONOMIE
+--------------------------------------------------------------------------------
+- **Style "Elite"** : Design épuré, ombres douces (Soft Shadows), bordures arrondies.
+- **Couleurs** : 
+    - Vert UNA (#1a5c37) dominant.
+    - Vert Clair (#27ae60) pour les accents.
+    - Blanc/Gris (#f8fafc) pour les fonds.
+- **Typographie** : Police 'Inter' pour une lisibilité moderne.
+- **Effets** : Glassmorphism (effet verre flouté) sur les modales et bannières.
+
+8. ÉVOLUTIONS POSSIBLES (V2)
+--------------------------------------------------------------------------------
+- Espace membre pour les étudiants (Connexion/Inscription).
+- Système de commentaires sous les actualités.
+- Newsletter automatisée.
+- Passage à une base de données PostgreSQL pour la production.
+
+================================================================================
+Dernière mise à jour : 02 Février 2026
+================================================================================

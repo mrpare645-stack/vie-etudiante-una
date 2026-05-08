@@ -1,0 +1,210 @@
+{% load static %}
+
+<section id="clubs-hub" class="clubs-hub-section py-5">
+  <div class="container section-title" data-aos="fade-up">
+    <div class="elite-label">Vie Associative</div>
+    <h2>Communautés & <span class="text-green">Impact</span></h2>
+    <p>Rejoignez un club existant ou proposez votre propre projet pour dynamiser l'UNA.</p>
+  </div>
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+      <div class="filter-info">
+        <span class="badge bg-light text-dark shadow-sm p-2 px-3">
+          <i class="bi bi-grid-fill text-green me-2"></i> {{ clubs|length }} Clubs Actifs
+        </span>
+      </div>
+      <button class="btn-launch-club" id="btnOpenClubForm">
+        <i class="bi bi-rocket-takeoff-fill"></i> Proposer mon Club
+      </button>
+    </div>
+
+    <div class="row gy-4">
+      {% for club in clubs %}
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{% cycle '100' '200' '300' %}">
+        <div class="club-premium-card">
+          <div class="club-image-box">
+            {% if club.logo %}
+            <img src="{{ club.logo.url }}" class="club-logo" alt="{{ club.nom_club }}">
+            {% else %}
+            <img src="{% static 'mentor/assets/img/trainers/trainer-1.jpg' %}" class="club-logo" alt="Default">
+            {% endif %}
+            
+            <div class="club-overlay">
+              <span class="club-domain-tag">{{ club.domaine }}</span>
+              {% if club.url %}
+              <a href="{{ club.url }}" target="_blank" class="club-link-btn"><i class="bi bi-box-arrow-up-right"></i></a>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="club-body">
+            <h4>{{ club.nom_club }}</h4>
+            <p class="club-desc">{{ club.description|truncatechars:120 }}</p>
+            <div class="club-footer">
+              <div class="club-status"><i class="bi bi-check-circle-fill"></i> Certifié UNA</div>
+              <a href="#" class="btn-join">Rejoindre <i class="bi bi-plus-lg"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div class="empty-state-box">
+          <i class="bi bi-people-fill display-1"></i>
+          <p>La scène associative attend votre initiative.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="club-modal-overlay" id="clubModal">
+    <div class="club-modal-content">
+      <button class="modal-close-btn" id="btnCloseClubForm">&times;</button>
+      
+      <div class="modal-header-elite">
+        <h3>Lancer une Nouvelle Association</h3>
+        <p>Décrivez votre vision. L'administration validera votre club sous 48h.</p>
+      </div>
+
+      <form id="createClubForm" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nom du Club</label>
+          <input type="text" class="form-control" placeholder="ex: UNA Robotics Club" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Domaine / Catégorie</label>
+          <select class="form-select">
+            <option>Culture & Arts</option>
+            <option>Sciences & Technologie</option>
+            <option>Sport & Bien-être</option>
+            <option>Environnement</option>
+            <option>Social & Entraide</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Objectif Principal du Club</label>
+          <textarea class="form-control" rows="2" placeholder="Quel est le but ultime de ce club ?"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description détaillée</label>
+          <textarea class="form-control" rows="3" placeholder="Parlez-nous des activités prévues..."></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Logo du Club</label>
+          <input type="file" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Lien Social (Optionnel)</label>
+          <input type="url" class="form-control" placeholder="https://facebook.com/monclub">
+        </div>
+        
+        <div class="col-12 mt-4">
+          <button type="submit" class="btn-submit-club">Envoyer pour Validation Admin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clubs-hub-section { background: #f8fafc; font-family: 'Inter', sans-serif; }
+  .text-green { color: #27ae60; }
+  .elite-label {
+    display: inline-block; background: rgba(39, 174, 96, 0.1); color: #1a5c37;
+    padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
+  }
+
+  /* --- BOUTON LANCEMENT --- */
+  .btn-launch-club {
+    background: #1a5c37; color: white; border: none; padding: 12px 25px;
+    border-radius: 12px; font-weight: 700; transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(26, 92, 55, 0.2);
+  }
+  .btn-launch-club:hover { background: #27ae60; transform: translateY(-3px); }
+
+  /* --- CARD DESIGN --- */
+  .club-premium-card {
+    background: white; border-radius: 24px; overflow: hidden;
+    border: 1px solid #e2e8f0; transition: 0.4s; height: 100%;
+    display: flex; flex-direction: column;
+  }
+  .club-premium-card:hover { transform: translateY(-10px); border-color: #27ae60; box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+
+  .club-image-box { position: relative; height: 200px; background: #f1f5f9; overflow: hidden; }
+  .club-logo { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+  .club-premium-card:hover .club-logo { transform: scale(1.1); }
+
+  .club-overlay {
+    position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex; justify-content: space-between; align-items: flex-end; padding: 20px;
+    opacity: 0; transition: 0.3s;
+  }
+  .club-premium-card:hover .club-overlay { opacity: 1; }
+
+  .club-domain-tag { background: #27ae60; color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+  .club-link-btn { color: white; font-size: 20px; }
+
+  .club-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+  .club-body h4 { font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 10px; }
+  .club-desc { color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+
+  .club-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+  .club-status { font-size: 12px; color: #1a5c37; font-weight: 700; }
+  .btn-join { color: #27ae60; text-decoration: none; font-weight: 700; font-size: 14px; }
+
+  /* --- MODAL DESIGN --- */
+  .club-modal-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center; z-index: 10000;
+    opacity: 0; pointer-events: none; transition: 0.4s;
+  }
+  .club-modal-overlay.active { opacity: 1; pointer-events: all; }
+  .club-modal-content {
+    background: white; width: 95%; max-width: 650px; padding: 40px; border-radius: 30px;
+    position: relative; transform: scale(0.9); transition: 0.4s;
+  }
+  .club-modal-overlay.active .club-modal-content { transform: scale(1); }
+
+  .modal-close-btn { position: absolute; top: 20px; right: 20px; border: none; background: #f1f5f9; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; }
+  .btn-submit-club { width: 100%; background: #1a5c37; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; transition: 0.3s; }
+  .btn-submit-club:hover { background: #27ae60; }
+  
+  .form-control, .form-select { padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; }
+
+  .empty-state-box { border: 2px dashed #cbd5e1; border-radius: 30px; padding: 60px; color: #94a3b8; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('clubModal');
+    const openBtn = document.getElementById('btnOpenClubForm');
+    const closeBtn = document.getElementById('btnCloseClubForm');
+    const form = document.getElementById('createClubForm');
+
+    // Ouverture / Fermeture
+    openBtn.onclick = () => modal.classList.add('active');
+    closeBtn.onclick = () => modal.classList.remove('active');
+    window.onclick = (e) => { if(e.target == modal) modal.classList.remove('active'); };
+
+    // Soumission Formulaire
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      const submitBtn = this.querySelector('.btn-submit-club');
+      
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Envoi en cours...';
+      submitBtn.disabled = true;
+
+      // Simulation de l'envoi vers l'admin
+      setTimeout(() => {
+        modal.classList.remove('active');
+        alert("Succès ! Votre demande de création de club a été envoyée. L'administration de l'UNA l'étudiera sous peu.");
+        submitBtn.innerHTML = 'Envoyer pour Validation Admin';
+        submitBtn.disabled = false;
+        form.reset();
+      }, 2000);
+    };
+  });
+</script>

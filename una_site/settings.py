@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,25 +20,70 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g+w)gf-n+1$ycng2)fvgx7h4nm+%x3wg%yw@35blz-nl@iy02n'
+# Build production-ready settings from environment variables.
+# Use a safe secret key in production via .env or the environment.
+SECRET_KEY = os.environ.get('871897684961814', 'django-insecure-g+w)gf-n+1$ycng2)fvgx7h4nm+%x3wg%yw@35blz-nl@iy02n')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['pare.pythonanywhere.com']
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+
+
+JAZZMIN_SETTINGS = {
+    "site_header": "UNA Admin",
+    "site_brand": "Vie Estudiantine UNA",
+    "welcome_sign": "Bienvenue sur le gestionnaire UNA",
+    "copyright": "Université Nangui Abrogoua",
+    "search_model": ["vie_estudiantine_una.Actualite"],
+
+    # --- Bouton Voir le Site ---
+    "site_url": "/",
+    "topmenu_links": [
+        {"name": "Voir le site", "url": "/", "new_window": True, "icon": "fas fa-globe"},
+    ],
+    
+    # Organisation du menu latéral
+    "side_menu_groups": [
+        {
+            "name": "Communication",
+            "models": ["vie_estudiantine_una.Actualite", "vie_estudiantine_una.Evenement", "vie_estudiantine_una.Slide", "vie_estudiantine_una.Banner"],
+        },
+        {
+            "name": "Vie Étudiante & CROU",
+            "models": ["vie_estudiantine_una.OffreLogement", "vie_estudiantine_una.ServiceCROU", "vie_estudiantine_una.Club_association"],
+        },
+        {
+            "name": "Académique & Partenaires",
+            "models": ["vie_estudiantine_una.Filiere", "vie_estudiantine_una.Partenaire", "vie_estudiantine_una.Acteur"],
+        },
+        {
+            "name": "Retours & Témoignages",
+            "models": ["vie_estudiantine_una.Temoignage", "vie_estudiantine_una.Temoin"],
+        },
+    ],
+    "icons": {
+        "vie_estudiantine_una.Actualite": "fas fa-newspaper",
+        "vie_estudiantine_una.Evenement": "fas fa-calendar-alt",
+        "vie_estudiantine_una.OffreLogement": "fas fa-home",
+        "vie_estudiantine_una.Filiere": "fas fa-graduation-cap",
+    },
+}
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'vie_estudiantine_una',
+    
 ]
 
 MIDDLEWARE = [
@@ -63,6 +109,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'vie_estudiantine_una.context_processors.notifications_count',
             ],
         },
     },
@@ -74,12 +121,24 @@ WSGI_APPLICATION = 'una_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get('DB_NAME'):
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+            'NAME': os.environ['Una_site_db'],
+            'USER': os.environ.get('admin', ''),
+            'PASSWORD': os.environ.get('Bonjour2026@', ''),
+            'HOST': os.environ.get('DB_HOST', 'db'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -113,11 +172,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+
 
 STATIC_URL = '/static/'
-# Serve existing 'stactic' folder (renamed upstream) during development
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
    
@@ -129,5 +187,22 @@ MEDIA_ROOT = BASE_DIR /'media'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+LOGIN_URL = 'vie_estudiantine_una:login'
 
-  
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'mrpare645@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'maroukfsvgkufbyh')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Administration UNA <mrpare645@gmail.com>')
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('daungdo60'),
+    'API_KEY': os.environ.get('871897684961814'),
+    'API_SECRET': os.environ.get('gwnF37Er8RIT4E0ofHeN2u4prE'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

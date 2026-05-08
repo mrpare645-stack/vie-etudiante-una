@@ -1,0 +1,186 @@
+{% extends "mentor/base.html" %}
+
+{% block contenu_principal %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold mb-0">🛠 Espace de <span class="text-success">Gestion UNA</span></h2>
+            <p class="text-muted">Validez les publications pour les rendre visibles sur le site.</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-dark p-2">Admin : {{ user.username }}</span><br>
+            <a href="/admin/logout/" class="text-danger small fw-bold text-decoration-none">Se déconnecter</a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- DÉBUT BLOC TABLES ADMIN -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-database-gear me-2"></i>Gestion des Tables </h5>
+                    <span class="badge bg-secondary">{{ admin_shortcuts|length }} Tables</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for item in admin_shortcuts %}
+                        <div class="col-md-4 col-lg-3">
+                            <a href="{{ item.url }}" target="_blank" class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center p-3">
+                                <span class="fw-bold text-start">{{ item.name }}</span>
+                                <span class="badge bg-primary rounded-pill">{{ item.count }}</span>
+                            </a>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center py-3">
+                            <p class="text-muted mb-0">Aucune table d'administration trouvée.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIN BLOC TABLES ADMIN -->
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-success"><i class="bi bi-people-fill me-2"></i>Clubs</h5>
+                    <span class="badge rounded-pill bg-warning text-dark">{{ clubs_pending.count }}</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for club in clubs_pending %}
+                        <div class="list-group-item p-3 d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ club.nom_club }}</h6>
+                                <small class="text-muted">Domaine : {{ club.domaine }}</small>
+                            </div>
+                            <a href="{% url 'vie_estudiantine_una:valider' 'club' club.id %}" class="btn btn-sm btn-success rounded-pill">Valider</a>
+                        </div>
+                        {% empty %}
+                        <p class="p-4 text-center text-muted small">Aucun club en attente.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-success"><i class="bi bi-chat-quote-fill me-2"></i>Témoignages</h5>
+                    <span class="badge rounded-pill bg-warning text-dark">{{ temoins_pendings.count }}</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for t in temoins_pendings %}
+                        <div class="list-group-item p-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ t.nom }}</h6>
+                                    <small class="badge bg-light text-dark border">{{ t.promotion }}</small>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="{% url 'vie_estudiantine_una:valider' 'temoin' t.id %}" class="btn btn-sm btn-success">Approuver</a>
+                                    <a href="{% url 'vie_estudiantine_una:supprimer' 'temoin' t.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce témoignage ?')">Refuser</a>
+                                </div>
+                            </div>
+                            <p class="small text-muted mb-0 fst-italic bg-light p-2 rounded">"{{ t.message|truncatechars:150 }}"</p>
+                        </div>
+                        {% empty %}
+                        <div class="p-5 text-center text-muted">
+                            <i class="bi bi-chat-dots display-4 d-block mb-2 text-light"></i>
+                            <small>Aucun témoignage à valider.</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold text-success"><i class="bi bi-calendar-event-fill me-2"></i>Événements</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Titre</th>
+                                <th>Statut</th>
+                                <th class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in events_pending %}
+                            <tr>
+                                <td class="ps-4 fw-bold">{{ e.titre }}</td>
+                                <td><span class="badge bg-warning text-dark">En attente</span></td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'vie_estudiantine_una:valider' 'event' e.id %}" class="btn btn-sm btn-success px-3 rounded-pill">Approuver</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-4 text-muted">Rien à valider ici.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-success"><i class="bi bi-shop-window me-2"></i>Services Étudiants</h5>
+                    <span class="badge rounded-pill bg-warning text-dark">{{ services_pending.count }}</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Nom</th>
+                                <th>Catégorie</th>
+                                <th class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in services_pending %}
+                            <tr>
+                                <td class="ps-4 fw-bold">{{ s.nom }}</td>
+                                <td><span class="badge bg-info text-dark">{{ s.categorie }}</span></td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'vie_estudiantine_una:valider' 'service' s.id %}" class="btn btn-sm btn-success px-3 rounded-pill">Approuver</a>
+                                    <a href="{% url 'vie_estudiantine_una:supprimer' 'service' s.id %}" class="btn btn-sm btn-outline-danger rounded-pill ms-1" onclick="return confirm('Refuser ce service ?')">Refuser</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-4 text-muted">Aucun service en attente.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card { border-radius: 15px; overflow: hidden; }
+    .btn-success { background-color: #1a5c37; border: none; }
+    .btn-success:hover { background-color: #27ae60; }
+    .list-group-item:hover { background-color: #f8fafc; }
+</style>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            {{ site_header|default:_('Django administration') }}
+        </a>
+    </h1>
+    
+    <!-- BOUTON VISUEL RETOUR DASHBOARD -->
+    <a href="/management/dashboard/" style="
+        display: inline-block;
+        background-color: #004687; /* Bleu UNA */
+        color: white;
+        padding: 8px 15px;
+        margin-left: 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 12px;
+        vertical-align: middle;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+        ⬅ RETOUR AU DASHBOARD
+    </a>
+{% endblock %}

@@ -1,0 +1,375 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+
+{% block contenu_principal %}
+<style>
+    :root {
+        --una-green: #27ae60;
+        --una-dark: #1a5c37;
+        --glass: rgba(255, 255, 255, 0.95);
+    }
+    body { background-color: #f4f7f6; }
+
+    /* Cards & Glassmorphism */
+    .dashboard-card {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        background: var(--glass);
+        overflow: hidden;
+    }
+    .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important; }
+    
+    .card-header-custom {
+        background: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        padding: 1.25rem 1.5rem;
+    }
+
+    /* Profile Section */
+    .profile-img-container {
+        position: relative;
+        display: inline-block;
+    }
+    .profile-img {
+        border: 5px solid #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        object-fit: cover;
+    }
+    .status-indicator {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 18px;
+        height: 18px;
+        background: #2ecc71;
+        border: 3px solid #fff;
+        border-radius: 50%;
+    }
+
+    /* Contribution Buttons */
+    .btn-contribute {
+        border-radius: 12px;
+        padding: 12px 20px;
+        transition: 0.3s;
+        font-weight: 600;
+        border: 1px solid #eee;
+    }
+    .btn-contribute:hover { background: var(--una-green); color: white !important; border-color: var(--una-green); }
+
+    /* Custom Badges */
+    .badge-soft-success { background: #e8f5e9; color: #2e7d32; }
+    .badge-soft-warning { background: #fff3e0; color: #ef6c00; }
+    
+    .list-group-item { border-left: none; border-right: none; transition: 0.2s; }
+    .list-group-item:hover { background-color: #fcfcfc; }
+</style>
+
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <h1 class="fw-bold mb-1" style="letter-spacing: -1px;">👋 Hello, <span class="text-success">{{ user.first_name|default:user.username }}</span></h1>
+            <p class="text-muted mb-0 font-monospace" style="font-size: 0.9rem;">Espace Personnel • Université Nangui Abrogoua</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'vie_estudiantine_una:edit_profile' %}" class="btn btn-white shadow-sm rounded-pill px-4 fw-bold">
+                <i class="bi bi-gear-fill me-2"></i>Réglages
+            </a>
+            <a href="{% url 'vie_estudiantine_una:logout' %}" class="btn btn-soft-danger shadow-sm rounded-pill px-4 fw-bold">
+                <i class="bi bi-box-arrow-right me-2"></i>Quitter
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} border-0 shadow-sm rounded-4 alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card dashboard-card shadow-sm h-100 border-0">
+                <div class="card-body p-4 text-center">
+                    <div class="profile-img-container mb-4">
+                        <img src="{{ user.profile.photo.url }}" class="rounded-circle profile-img" width="140" height="140">
+                        <div class="status-indicator"></div>
+                    </div>
+                    <h3 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h3>
+                    <span class="badge bg-light text-success rounded-pill px-3 py-2 mb-4 border">
+                        <i class="bi bi-mortarboard me-1"></i> {{ user.profile.filiere.nom|default:"Étudiant UNA" }}
+                    </span>
+
+                    <div class="d-flex justify-content-center gap-4 mb-4">
+                        <div>
+                            <div class="fw-bold fs-5 text-dark">{{ user.following.count }}</div>
+                            <small class="text-muted">Suivis</small>
+                        </div>
+                        <div class="vr"></div>
+                        <div>
+                            <div class="fw-bold fs-5 text-dark">{{ user.followers.count }}</div>
+                            <small class="text-muted">Abonnés</small>
+                        </div>
+                    </div>
+
+                    <div class="text-start bg-light rounded-4 p-3 border-0">
+                        <h6 class="fw-bold small text-uppercase text-muted mb-2">À propos de moi</h6>
+                        <p class="small mb-0 text-dark" style="line-height: 1.6;">
+                            <i class="bi bi-heart-fill text-danger me-1"></i> 
+                            {{ user.profile.centres_interet|default:"Aucun centre d'intérêt renseigné." }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card dashboard-card shadow-sm mb-4 border-0">
+                <div class="card-header-custom">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Actions Rapides</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <button class="btn btn-white btn-contribute w-100 shadow-sm d-flex flex-column align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTemoignage">
+                                <i class="bi bi-chat-heart fs-4 text-success"></i>
+                                <span class="small">Témoigner</span>
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-white btn-contribute w-100 shadow-sm d-flex flex-column align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalClub">
+                                <i class="bi bi-people-fill fs-4 text-primary"></i>
+                                <span class="small">Lancer un Club</span>
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-white btn-contribute w-100 shadow-sm d-flex flex-column align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalService">
+                                <i class="bi bi-shop fs-4 text-warning"></i>
+                                <span class="small">Proposer un Service</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav nav-pills mb-4 gap-2" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="pill" data-bs-target="#pills-history">Mon Historique</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="pill" data-bs-target="#pills-events">Événements</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="pill" data-bs-target="#pills-clubs">Clubs Suivis</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-history">
+                    <div class="card dashboard-card shadow-sm border-0">
+                        <div class="list-group list-group-flush">
+                            {% for item in my_contributions %}
+                            <div class="list-group-item p-3 d-flex justify-content-between align-items-center bg-transparent">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-circle bg-light p-2 rounded-circle">
+                                        {% if item.nom_club %}<i class="bi bi-people text-primary"></i>
+                                        {% elif item.message %}<i class="bi bi-chat-quote text-info"></i>
+                                        {% else %}<i class="bi bi-shop text-warning"></i>{% endif %}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">
+                                            {{ item.nom_club|default:item.nom|default:"Témoignage" }}
+                                        </h6>
+                                        <small class="text-muted">{{ item.created_at|date:"d M Y" }}</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if item.status == 'APPROVED' or item.is_approved %}
+                                        <span class="badge badge-soft-success rounded-pill px-3">Approuvé</span>
+                                    {% elif item.status == 'PENDING' %}
+                                        <span class="badge badge-soft-warning rounded-pill px-3">En attente</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-muted rounded-pill px-3">Masqué</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="p-5 text-center">
+                                <i class="bi bi-folder2-open display-4 text-light"></i>
+                                <p class="text-muted mt-2">Aucune contribution trouvée.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-events">
+                    <div class="row g-3">
+                        {% for event in suggested_events %}
+                        <div class="col-md-6">
+                            <div class="card h-100 dashboard-card border-0 shadow-sm p-3">
+                                <div class="d-flex gap-3">
+                                    {% if event.photo %}
+                                    <img src="{{ event.photo.url }}" class="rounded-3" width="70" height="70" style="object-fit: cover;">
+                                    {% else %}
+                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="width:70px; height:70px;"><i class="bi bi-calendar-event"></i></div>
+                                    {% endif %}
+                                    <div class="overflow-hidden">
+                                        <h6 class="text-truncate mb-1 fw-bold">{{ event.titre }}</h6>
+                                        <p class="small text-muted mb-0">{{ event.date|date:"d M Y" }}</p>
+                                        <a href="#" class="btn btn-link btn-sm p-0 text-success fw-bold">Détails <i class="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-center text-muted p-4">Rien à signaler pour le moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-clubs">
+                   <div class="card dashboard-card border-0 shadow-sm">
+                        <div class="list-group list-group-flush">
+                            {% for club in profile.clubs_suivis.all %}
+                            <div class="list-group-item d-flex align-items-center gap-3 bg-transparent">
+                                <img src="{{ club.logo.url|default:'/static/img/default_club.png' }}" class="rounded-circle border" width="45" height="45">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 fw-bold">{{ club.nom_club }}</h6>
+                                    <small class="text-muted">{{ club.domaine }}</small>
+                                </div>
+                                <button class="btn btn-sm btn-light rounded-pill">Voir</button>
+                            </div>
+                            {% empty %}
+                            <div class="p-4 text-center text-muted">Abonnez-vous à des clubs pour les voir ici !</div>
+                            {% endfor %}
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade" id="modalTemoignage" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Partager mon expérience</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'vie_estudiantine_una:envoyer_temoignage' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Votre message</label>
+                        <textarea name="message" class="form-control" rows="4" placeholder="Racontez votre expérience..." required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success rounded-pill fw-bold">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalClub" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Lancer un Club</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'vie_estudiantine_una:envoyer_club' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Nom du Club</label>
+                        <input type="text" name="nom_club" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Domaine</label>
+                        <select name="domaine" class="form-select">
+                            <option>Technologie</option>
+                            <option>Sport</option>
+                            <option>Culture</option>
+                            <option>Social</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Description</label>
+                        <textarea name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Logo</label>
+                        <input type="file" name="logo" class="form-control" accept="image/*">
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Lien (Site/Réseau)</label>
+                        <input type="url" name="url" class="form-control" placeholder="https://...">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary rounded-pill fw-bold">Soumettre</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalService" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Proposer un Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'vie_estudiantine_una:envoyer_service' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Nom du Service</label>
+                        <input type="text" name="nom" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Catégorie</label>
+                        <select name="categorie" class="form-select">
+                            <option value="restauration">Restauration</option>
+                            <option value="logement">Logement</option>
+                            <option value="sante">Santé</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Description</label>
+                        <textarea name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Contact</label>
+                            <input type="text" name="contact" class="form-control" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Localisation</label>
+                            <input type="text" name="localisation" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Image</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning text-white rounded-pill fw-bold">Proposer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

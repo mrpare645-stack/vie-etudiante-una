@@ -1,0 +1,160 @@
+{% if banner %}
+<section class="premium-banner">
+    <div class="banner-bg" style="background-image: url('{{ banner.image.url }}');"></div>
+    <div class="banner-overlay"></div>
+
+    <div class="container banner-container">
+        <div class="banner-content">
+            <div class="decorative-line"></div>
+            
+            <h1 class="banner-title">
+                {{ banner.titre }}
+            </h1>
+            
+            <div class="banner-separator">
+                <span class="dot"></span>
+                <span class="line"></span>
+                <span class="dot"></span>
+            </div>
+
+            <p class="banner-subtitle">
+                {{ banner.sous_titre }}
+            </p>
+            
+            <nav class="banner-breadcrumb">
+                <a href="/">Accueil</a> 
+                <i class="bi bi-chevron-right"></i> 
+                <span>{{ banner.titre }}</span>
+            </nav>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<style>
+    /* --- STYLE DU BANNER --- */
+    .premium-banner {
+        position: relative;
+        min-height: 450px;
+        height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: #1a5c37; /* Couleur de secours */
+        font-family: 'Inter', sans-serif;
+    }
+
+    .banner-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.5s ease-out;
+        z-index: 1;
+    }
+
+    /* Overlay dégradé vert profond */
+    .banner-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(
+            to bottom, 
+            rgba(26, 92, 55, 0.85), 
+            rgba(0, 0, 0, 0.6)
+        );
+        z-index: 2;
+    }
+
+    .banner-container {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .banner-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .decorative-line {
+        width: 80px;
+        height: 5px;
+        background: #27ae60; /* Vert plus clair */
+        margin: 0 auto 25px;
+        border-radius: 50px;
+    }
+
+    .banner-title {
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -1.5px;
+        margin-bottom: 15px;
+        line-height: 1.1;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* Séparateur élégant */
+    .banner-separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+    .banner-separator .line { width: 40px; height: 1px; background: white; }
+    .banner-separator .dot { width: 6px; height: 6px; background: #27ae60; border-radius: 50%; }
+
+    .banner-subtitle {
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        font-weight: 300;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 750px;
+        margin: 0 auto 30px;
+    }
+
+    /* Breadcrumb style */
+    .banner-breadcrumb {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 25px;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 14px;
+        gap: 10px;
+    }
+    .banner-breadcrumb a { color: #27ae60; text-decoration: none; font-weight: 600; }
+    .banner-breadcrumb span { color: white; opacity: 0.8; }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Effet parallaxe au scroll */
+    @media (min-width: 992px) {
+        .premium-banner:hover .banner-bg {
+            transform: scale(1.05);
+        }
+    }
+</style>
+
+<script>
+    // Petit effet de parallaxe simple au scroll
+    window.addEventListener('scroll', function() {
+        const bg = document.querySelector('.banner-bg');
+        if (bg) {
+            let scroll = window.pageYOffset;
+            bg.style.transform = 'translateY(' + (scroll * 0.4) + 'px)';
+        }
+    });
+</script>

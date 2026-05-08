@@ -1,0 +1,143 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+
+{% block contenu_principal %}
+<style>
+    .notif-card {
+        border-radius: 20px;
+        overflow: hidden;
+        background: #fff;
+    }
+    
+    .notif-item {
+        border-left: 4px solid transparent;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    
+    /* Style pour les notifications non lues */
+    .notif-unread {
+        background-color: #f0f7f4 !important; /* Vert très pâle */
+        border-left-color: #27ae60 !important;
+    }
+    
+    .notif-unread::after {
+        content: "";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        background-color: #27ae60;
+        border-radius: 50%;
+    }
+
+    .notif-item:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.005);
+        z-index: 2;
+    }
+
+    .icon-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .type-indicator {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .bg-follow { background: #3498db; }
+    .bg-msg { background: #e67e22; }
+    .bg-like { background: #e74c3c; }
+    .bg-default { background: #95a5a6; }
+</style>
+
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0">Notifications</h2>
+                    <p class="text-muted small">Restez informé de vos interactions récentes</p>
+                </div>
+                {% if notifications %}
+                <button class="btn btn-light btn-sm rounded-pill px-3 border">
+                    Tout marquer comme lu
+                </button>
+                {% endif %}
+            </div>
+
+            <div class="card notif-card shadow-sm border-0">
+                <div class="list-group list-group-flush">
+                    {% for notif in notifications %}
+                        <a href="{% if notif.notification_type == 'message' %}{% if notif.conversation %}{% url 'vie_estudiantine_una:chat_room' notif.conversation.id %}{% else %}{% url 'vie_estudiantine_una:start_chat' notif.sender.username %}{% endif %}{% elif notif.post %}{% url 'vie_estudiantine_una:social_feed' %}{% elif notif.notification_type == 'follow' %}{% url 'vie_estudiantine_una:profile_public' notif.sender.username %}{% else %}#{% endif %}" 
+                           class="list-group-item list-group-item-action d-flex align-items-center p-3 p-md-4 notif-item {% if not notif.is_read %}notif-unread{% endif %}">
+                            
+                            <div class="icon-wrapper me-3">
+                                <img src="{{ notif.sender.profile.photo.url }}" class="rounded-circle border" width="55" height="55" style="object-fit: cover;">
+                                <div class="type-indicator 
+                                    {% if notif.notification_type == 'follow' %}bg-follow
+                                    {% elif notif.notification_type == 'message' %}bg-msg
+                                    {% elif notif.notification_type == 'like' %}bg-like
+                                    {% else %}bg-default{% endif %} shadow-sm">
+                                    {% if notif.notification_type == 'follow' %}<i class="bi bi-person-plus-fill"></i>
+                                    {% elif notif.notification_type == 'message' %}<i class="bi bi-chat-fill"></i>
+                                    {% elif notif.notification_type == 'like' %}<i class="bi bi-heart-fill"></i>
+                                    {% else %}<i class="bi bi-bell-fill"></i>{% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0 fw-bold text-dark text-truncate" style="max-width: 70%;">
+                                        {{ notif.sender.get_full_name|default:notif.sender.username }}
+                                    </h6>
+                                    <span class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="bi bi-clock me-1"></i>{{ notif.created_at|timesince }}
+                                    </span>
+                                </div>
+                                <p class="mb-0 text-secondary small text-truncate-2" style="line-height: 1.4;">
+                                    {{ notif.message }}
+                                </p>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                            </div>
+                            <h5 class="text-muted fw-bold">Rien de neuf ici</h5>
+                            <p class="text-muted small">Vos futures notifications apparaîtront ici.</p>
+                            <a href="{% url 'vie_estudiantine_una:social_feed' %}" class="btn btn-success btn-sm rounded-pill px-4 mt-2">
+                                Parcourir le fil d'actualité
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p class="text-muted small">Vous pouvez gérer vos préférences d'alerte dans les <a href="{% url 'vie_estudiantine_una:edit_profile' %}" class="text-success text-decoration-none fw-bold">paramètres du profil</a>.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
