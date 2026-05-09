@@ -13,4 +13,4 @@ COPY . /code/
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn una_site.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
+CMD ["sh", "-c", "python manage.py migrate --noinput --fake-initial && gunicorn una_site.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
