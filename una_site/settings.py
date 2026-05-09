@@ -146,9 +146,9 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Administration UNA <m
 
 # Cloudinary
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', os.environ.get('CLOUD_NAME')),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', os.environ.get('API_KEY')),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', os.environ.get('API_SECRET')),
 }
 
 STORAGES = {
@@ -160,6 +160,7 @@ STORAGES = {
     },
 }
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
