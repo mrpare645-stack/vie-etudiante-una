@@ -14,4 +14,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate && gunicorn una_site.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && python manage.py migrate --noinput --fake-initial || true && python manage.py migrate --noinput --fake && gunicorn una_site.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
