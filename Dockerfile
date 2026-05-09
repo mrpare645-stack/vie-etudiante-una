@@ -10,9 +10,6 @@ COPY . .
 ENV SECRET_KEY=temp-key-for-build
 ENV DB_NAME=placeholder
 
-RUN mkdir -p /code/staticfiles
-RUN python manage.py collectstatic --noinput
-
 EXPOSE 8000
 
 CMD ["sh", "-c", "mkdir -p /code/staticfiles && python manage.py collectstatic --noinput && python manage.py migrate --noinput --fake-initial || true && python manage.py migrate --noinput --fake && gunicorn una_site.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
